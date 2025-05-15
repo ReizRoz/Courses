@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service' // ייבוא השירות 
+import { AuthService } from '../../service/auth.service' // ייבוא השירות 
 import { HttpClientModule } from '@angular/common/http';  
 
 @Component({
@@ -27,21 +27,20 @@ password: new FormControl('', Validators.required)
 });
 }   
 
-onSubmitLogin() {
+onSubmitLogin():void {
 if (this.loginForm.valid) {
   this.isSubmitting.set(true);
-this.authService.login(this.loginForm.value).subscribe({
-next: (response) => {
+this.authService.login(this.loginForm.value).subscribe({//תאזין למה שחוזר מהסרביס ששלחתי לו את הפרטים של הטופס?
+next: (response) => {//מה זה נNEXT המהרה על משתנה או מילה שמורה
   this.isSubmitting.set(false);
 console.log('התחברות הצליחה:', response);
-// שמור את הטוקן, userId, role בסטורג'
 localStorage.setItem('token', response.token);
 localStorage.setItem('userId', response.userId.toString());
 localStorage.setItem('role', response.role);
 this.router.navigate(['/courses']);
 },
 error: (error) => {
-  this.isSubmitting.set(false); 
+  this.isSubmitting.set(false);
 console.error('שגיאה בהתחברות:', error);
 this.errorMessage.set('שם המשתמש או הסיסמה שגויים.') // הצג הודעת שגיאה
 }

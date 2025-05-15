@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Course } from '../app/models/cours.modul'; // נתיב מעודכן
-import { AuthService } from '../app/auth.service'
+import { Course } from '../models/course.modul'; // נתיב מעודכן
+import { AuthService } from './auth.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:3000/api/courses';
+  private apiUrl = 'http://localhost:3000/api/courses ';
   private authTokenKey = 'authToken';
   constructor(private http: HttpClient, private authService: AuthService) { }
 

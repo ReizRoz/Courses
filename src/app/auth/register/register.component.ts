@@ -1,9 +1,8 @@
-
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service'; // ייבוא השירות   
+import { AuthService } from '../../service/auth.service'; // ייבוא השירות   
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -56,13 +55,3 @@ isSubmitting = signal<boolean>(false);
         }
       }
     }
-/*
-
-**הסבר לשינויים בקומפוננטות:**
-
-  * ייבאנו את `AuthService`.
-  * הזרקנו את `AuthService` לקונסטרקטור.
-  * בפונקציות `onSubmitLogin()` ו-`onSubmitRegister()`, אנחנו קוראים לפונקציות המתאימות בשירות `AuthService` (`login` ו-`register`) עם נתוני הטופס.
-  * אנחנו משתמשים ב-`subscribe` כדי לטפל בתגובה האסינכרונית מהשרת.
-  * במקרה של הצלחה (`next`), אנחנו מדפיסים את התגובה לקונסול, שומרים את הטוקן ופרטי המשתמש ב-`localStorage` ומנווטים לעמוד הקורסים (עבור התחברות) או לעמוד ההתחברות (עבור הרשמה).
-  * במקרה של שגיאה (`error`), אנחנו מדפיסים את השגיאה לקונסול ומציגים הודעת שגיאה למשתמש.*/

@@ -1,0 +1,39 @@
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+  <div class="form-group">
+    <label for="email">אימייל:</label>
+    <input type="email" id="email" name="email" formControlName="email">
+    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']) {
+      <div class="error-message">
+        שדה האימייל הוא חובה.
+      </div>
+    }
+    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']) {
+      <div class="error-message">
+        פורמט האימייל אינו תקין.
+      </div>
+    }
+  </div>
+  <div class="form-group">
+    <label for="password">סיסמה:</label>
+    <input type="password" id="password" name="password" formControlName="password">
+    @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']) {
+      <div class="error-message">
+        שדה הסיסמה הוא חובה.
+      </div>
+    }
+  </div>
+  <a [routerLink]="['/register']" class="switch-form-link">למשתמש חדש</a>
+  <button type="submit" class="login-button" [disabled]="loginForm.invalid || isSubmitting()">
+    @if (isSubmitting()) {
+      <span class="spinner">טוען...</span>
+    } @else {
+      כניסה
+    }
+  </button>
+</form>
+
+@if (errorMessage()) {
+  <div class="error-message overall-error">
+    {{ errorMessage() }}
+  </div>
+}

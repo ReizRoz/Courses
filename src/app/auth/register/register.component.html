@@ -1,0 +1,63 @@
+<form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
+  <div class="form-group">
+    <label for="name">שם:</label>
+    <input type="text" id="name" name="name" formControlName="name">
+    @if (registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']) {
+      <div class="error-message">
+        שדה השם הוא חובה.
+      </div>
+    }
+  </div>
+  <div class="form-group">
+    <label for="email">אימייל:</label>
+    <input type="email" id="email" name="email" formControlName="email">
+    @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']) {
+      <div class="error-message">
+        שדה האימייל הוא חובה.
+      </div>
+    }
+    @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']) {
+      <div class="error-message">
+        פורמט האימייל אינו תקין.
+      </div>
+    }
+  </div>
+  <div class="form-group">
+    <label for="password">סיסמה:</label>
+    <input type="password" id="password" name="password" formControlName="password">
+    @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']) {
+      <div class="error-message">
+        שדה הסיסמה הוא חובה.
+      </div>
+    }
+  </div>
+  <div class="form-group">
+    <label for="role">תפקיד:</label>
+    <select name="role" id="role" formControlName="role">
+      <option value="" disabled selected>בחר תפקיד</option>
+      <option value="student">תלמיד</option>
+      <option value="teacher">מורה</option>
+    </select>
+    @if (registerForm.get('role')?.touched && registerForm.get('role')?.errors?.['required']) {
+      <div class="error-message">
+        שדה התפקיד הוא חובה.
+      </div>
+    }
+  </div>
+
+  <a [routerLink]="['/login']" class="switch-form-link">יש לך כבר חשבון?</a>
+  <button type="submit" class="register-button" [disabled]="registerForm.invalid || isSubmitting()">
+    @if (isSubmitting()) {
+      <span class="spinner">נרשם...</span>
+    } @else {
+      הרשמה
+    }
+  </button>
+
+  @if (errorMessage()) {
+    <div class="error-message overall-error">
+      {{ errorMessage()}}
+    </div>
+  }
+</form>
+
