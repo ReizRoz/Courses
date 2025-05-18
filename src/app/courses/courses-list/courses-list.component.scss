@@ -1,0 +1,96 @@
+/* src/app/courses-list/courses-list.component.scss */
+@use "sass:color";
+.courses-container {
+    padding: 20px;
+    background-color: var(--background-light);
+    min-height: calc(100vh - 60px); /* גובה מינימלי - גובה ה-header */
+    direction: rtl; /* יישור לימין */
+}
+
+h2 {
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.course-card {
+    background-color: var(--text-color-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.course-card h3 {
+    color: var(--primary-blue);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.course-card p {
+    color: var(--text-color-dark);
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end; /* יישור הכפתורים לימין בתוך הכרטיס */
+}
+
+.actions button {
+    background-color: var(--button-primary);
+    color: var(--text-color-light);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    &:hover {
+        background-color: var(--button-primary-hover);
+    }
+}
+
+.actions button:last-child {
+    background-color: var(--secondary-gold); /* צבע זהב לפרטים */
+    &:hover {
+        background-color: color.adjust(#a28b17, $lightness: -10%);/* שימוש ב-darken מתוך SASS */
+    }
+}
+
+.edit-courses-button {
+    background-color: var(--button-success); /* צבע ירוק לעריכה */
+    color: var(--text-color-light);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+    display: block; /* כדי שיתפוס שורה משלו */
+    margin-left: auto; /* ליישור לימין */
+    margin-right: auto; /* ליישור למרכז אם רוחב הדף גדול */
+    &:hover {
+        background-color: var(--button-success-hover);
+    }
+}
+
+.error {
+    color: var(--error-color);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-color-dark);
+}

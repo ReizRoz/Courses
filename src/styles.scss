@@ -1,1 +1,90 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+    --primary-blue: #202547;
+    --white-color: #ffffff;
+    --golden-color: #a28b17;
+    --secondary-gold: #a28b17; // מזהה את הזהב שהיה בקוד שלך
+    --background-dark: #f0f2f5; // אפור בהיר לרקע, כמו שמופיע בקוד ה-scss שלך
+    --background-light: #f8f9fa; // רקע בהיר יותר
+    --text-color-light: #ffffff;
+    --text-color-dark: #333333;
+    --button-primary: var(--primary-blue); // כחול ככפתור ראשי
+    --button-primary-hover: #1a1e3a; // גוון כהה יותר לכחול הראשי
+    --button-success: #28a745; // ירוק לשמירה/הצלחה
+    --button-success-hover: #218838; // גוון כהה יותר לירוק
+    --error-color: #dc3545; // אדום לשגיאות
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; direction: rtl; } /* הוספתי direction: rtl */
+
+/* סגנונות גלובליים נוספים */
+.card {
+    background-color: var(--text-color-light);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.card-title {
+    text-align: center;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--text-color-dark);
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.overall-error {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.spinner {
+    display: inline-block;
+    /* אנימציית טעינה בסיסית */
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--golden-color);
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* סגנונות עבור אלמנטים כלליים באפליקציה */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  direction: rtl; /* יישור לימין של כל האתר */
+  background-color: var(--background-light); /* רקע כללי בהיר */
+}

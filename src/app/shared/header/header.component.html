@@ -1,0 +1,15 @@
+<div class="app-header">
+    <div class="user-info" (click)="toggleLogoutMenu()">
+      @if (loggedInUserName()) {
+        <div class="user-icon">{{ loggedInUserName() }}</div>
+      }
+      @if (showLogoutMenu()) {
+        <div class="logout-menu">
+          <button (click)="logout()">יציאה</button>
+        </div>
+      }
+    </div>
+    <div class="header-image">
+      <img src="assets/images/image2.jpg" alt="לוגו" style="height: 3cm;">
+    </div>
+  </div>

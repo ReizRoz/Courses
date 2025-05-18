@@ -1,55 +1,58 @@
+/* src/app/home/home.component.scss */
+
 .home-container {
-    display: flex;
-    height: 100vh; /* גובה המסך המלא */
-  }
-  
-  .image-side {
-    width: 66%;
-  }
-  
-  .image-side img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* כדי שהתמונה תכסה את כל השטח בלי לעוות */
-  }
-  
-  .text-side {
-    background-color: #202547; /* רקע כחול */
-    color: white;
-    width: 34%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .welcome-text {
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .small-image {
-    width: 5cm;
-    height: 3cm;
-    margin-top: 20px;
-  }
-  
-  .login-button {
-    position: absolute;
-    top: 20px;
-    left: 20px; /* שינוי מ-right ל-left */
-    background-color: transparent;
-    color: white;
-    border: 1px solid white;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1em;
-    border-radius: 5px;
-    text-decoration: none;
-  }
-  
-  .login-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
+  display: flex;
+  height: 100vh; /* גובה המסך המלא */
+  direction: rtl; /* יישור לימין */
+}
+
+.image-side {
+  width: 66%;
+}
+
+.image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* כדי שהתמונה תכסה את כל השטח בלי לעוות */
+}
+
+.text-side {
+  background-color: var(--primary-blue); /* רקע כחול */
+  color: var(--text-color-light);
+  width: 34%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.small-image {
+  width: 5cm;
+  height: 3cm;
+  margin-top: 20px;
+}
+
+.login-button {
+  position: absolute;
+  top: 20px;
+  left: 20px; /* שינוי מ-right ל-left כי הכפתור בעברית יהיה בצד שמאל */
+  background-color: transparent;
+  color: var(--text-color-light);
+  border: 1px solid var(--text-color-light);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.login-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,54 @@
+<app-header></app-header>
+
+<div class="course-details-container">
+  <ng-container *ngIf="course(); else loadingOrError">
+    <div class="course-header">
+      <h1>{{ course()!.title }}</h1>
+      <p class="description">{{ course()!.description }}</p>
+    </div>
+
+    <div class="course-actions">
+      <ng-container *ngIf="userRole() === 'student'">
+        <button
+          (click)="toggleEnrollment()"
+          [ngClass]="{'enrolled-btn': isEnrolled(), 'unrolled-btn': !isEnrolled()}"
+        >
+          {{ isEnrolled() ? 'בטל הרשמה' : 'הירשם לקורס' }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="userRole() === 'teacher'">
+        <button class="edit-btn" (click)="editCourse()">ערוך קורס</button>
+        <button class="delete-btn" (click)="deleteCourse()">מחק קורס</button>
+      </ng-container>
+    </div>
+
+    <div class="lessons-section">
+      <h2>שיעורים בקורס:</h2>
+      <p *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+      <div *ngIf="!lessons() || lessons()!.length === 0">
+        <p>אין שיעורים זמינים עבור קורס זה עדיין.</p>
+      </div>
+
+      <ul class="lessons-list" *ngIf="lessons() && lessons()!.length > 0">
+        <li *ngFor="let lesson of lessons()">
+          <h3>{{ lesson.title }}</h3>
+          <p>{{ lesson.content }}</p>
+          </li>
+      </ul>
+    </div>
+
+    <button class="back-button" (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
+
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <div *ngIf="errorMessage(); else loading">
+      <p class="error-message">{{ errorMessage() }}</p>
+    </div>
+    <ng-template #loading>
+      <p class="loading-message">טוען פרטי קורס...</p>
+    </ng-template>
+  </ng-template>
+</div>

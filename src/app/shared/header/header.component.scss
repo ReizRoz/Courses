@@ -1,0 +1,64 @@
+/* src/app/shared/header/header.component.scss */
+
+.app-header {
+    background-color: var(--text-color-light);
+    color: var(--primary-blue);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between; /* כדי שהתמונה והאייקון יהיו בקצוות */
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    direction: rtl; /* ליישור לימין */
+}
+
+.user-info {
+    position: relative;
+    cursor: pointer;
+    margin-left: 15px; /* מרווח מהקצה השמאלי */
+}
+
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--secondary-gold); /* צבע זהב לאייקון */
+    color: var(--text-color-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.header-image {
+    margin-right: 15px; /* מרווח מהקצה הימני */
+    img {
+        height: 3cm; /* גודל התמונה כפי שביקשת */
+    }
+}
+
+.logout-menu {
+    position: absolute;
+    top: 100%; /* מתחת לאייקון המשתמש */
+    left: 0; /* מיושר לשמאל (כי האייקון בצד שמאל) */
+    background-color: var(--text-color-light);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    min-width: 120px; /* רוחב מינימלי לתפריט */
+}
+
+.logout-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    text-align: right; /* יישור ימינה של הטקסט */
+    cursor: pointer;
+    color: var(--text-color-dark);
+    &:hover {
+        background-color: var(--background-dark);
+    }
+}
