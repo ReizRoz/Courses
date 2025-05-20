@@ -1,0 +1,27 @@
+<app-header></app-header>
+<div class="create-course-container">
+  <h2>צור קורס חדש</h2>
+
+  @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
+    }
+    @if (successMessage()) {
+    <div class="success-message">{{ successMessage() }}</div>
+    }
+    
+      <form (ngSubmit)="createCourse()">
+        <div class="form-group">
+          <label for="title">שם הקורס:</label>
+          <input type="text" id="title" [(ngModel)]="courseTitle" name="title" required>
+        </div>
+    
+        <div class="form-group">
+          <label for="description">תיאור הקורס:</label>
+          <textarea id="description" [(ngModel)]="courseDescription" name="description" rows="5" required></textarea>
+        </div>
+    
+        <button type="submit" class="submit-button">צור קורס</button>
+      </form>
+    
+      <button class="back-button" (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
+    </div>

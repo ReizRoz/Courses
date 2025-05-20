@@ -1,0 +1,98 @@
+/* src/app/courses/edit-course/edit-course.component.scss */
+.edit-course-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--text-color-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    direction: rtl; // יישור לימין
+  
+    h2 {
+      color: var(--primary-blue);
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+      font-weight: bold;
+    }
+  
+    .form-group {
+      margin-bottom: 20px;
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-color-dark);
+        font-weight: bold;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 1em;
+        box-sizing: border-box;
+      }
+      textarea {
+        resize: vertical;
+      }
+    }
+  
+    .submit-button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-blue);
+      color: var(--text-color-light);
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        // שוב, הימנע מ-darken עם var()
+        background-color: #0056b3; // צבע כחול מוכהה
+      }
+    }
+  
+    .back-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: var(--secondary-gold);
+      color: var(--text-color-light);
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+  
+      &:hover {
+        // שוב, הימנע מ-darken עם var()
+        background-color: #e0ac00; // צבע זהב מוכהה
+      }
+    }
+  
+    .error-message {
+      background-color: var(--error-background);
+      color: var(--error-color);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+  
+    .success-message {
+      background-color: var(--success-background);
+      color: var(--success-color);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+  }

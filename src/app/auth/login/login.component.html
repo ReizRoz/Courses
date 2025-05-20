@@ -1,39 +1,40 @@
-<form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
-  <div class="form-group">
-    <label for="email">אימייל:</label>
-    <input type="email" id="email" name="email" formControlName="email">
-    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']) {
-      <div class="error-message">
-        שדה האימייל הוא חובה.
-      </div>
-    }
-    @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']) {
-      <div class="error-message">
-        פורמט האימייל אינו תקין.
-      </div>
-    }
-  </div>
-  <div class="form-group">
-    <label for="password">סיסמה:</label>
-    <input type="password" id="password" name="password" formControlName="password">
-    @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']) {
-      <div class="error-message">
-        שדה הסיסמה הוא חובה.
-      </div>
-    }
-  </div>
-  <a [routerLink]="['/register']" class="switch-form-link">למשתמש חדש</a>
-  <button type="submit" class="login-button" [disabled]="loginForm.invalid || isSubmitting()">
-    @if (isSubmitting()) {
-      <span class="spinner">טוען...</span>
-    } @else {
-      כניסה
-    }
-  </button>
-</form>
+<div class="center-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>התחברות</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+        <mat-form-field>
+          <mat-label>אימייל</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="הכנס את האימייל שלך">
+        </mat-form-field>
 
-@if (errorMessage()) {
-  <div class="error-message overall-error">
+        <mat-form-field >
+          <mat-label>סיסמה</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="הכנס את הסיסמה שלך">
+        </mat-form-field>
+
+        <a mat-button color="accent" [routerLink]="['/register']" class="switch-form-link">למשתמש חדש</a>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isSubmitting()">
+          <ng-container *ngIf="isSubmitting(); else elseBlock">
+            <span>טוען...</span>
+          </ng-container>
+          <ng-template #elseBlock>
+            כניסה
+          </ng-template>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-container *ngIf="errorMessage()">
+  <div class="overall-error">
     {{ errorMessage() }}
   </div>
-}
+</ng-container>
+
+
+ 

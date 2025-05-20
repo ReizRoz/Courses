@@ -81,4 +81,24 @@ export class CourseService {
       })
     );
   }
-}
+
+  // **** פונקציה חדשה לעדכון קורס ****
+  updateCourse(courseId: number, courseData: Partial<Course>): Observable<Course> {
+    return this.http.put<Course>(`<span class="math-inline">\{this\.apiUrl\}/courses/</span>{courseId}`, courseData).pipe(
+      tap(updatedCourse => console.log(`Course ${courseId} updated:`, updatedCourse)),
+      catchError(error => {
+        console.error(`Error updating course ${courseId}:`, error);
+        return throwError(() => new Error(`Failed to update course ${courseId}.`));
+      })
+    );
+    }
+
+  deleteCourse(courseId: number): Observable<any> {
+    return this.http.delete<any>(`<span class="math-inline">\{this\.apiUrl\}/courses/</span>{courseId}`).pipe(
+      tap(() => console.log(`Course ${courseId} deleted successfully.`)),
+      catchError(error => {
+        console.error(`Error deleting course ${courseId}:`, error);
+        return throwError(() => new Error(`Failed to delete course ${courseId}.`));
+      })
+    );
+  }}

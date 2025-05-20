@@ -16,7 +16,11 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
-          "options": {
+          "options": {"stylePreprocessorOptions": {
+            "includePaths": [
+              "node_modules"
+            ]
+          },
             "outputPath": "dist/online-course-platform",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -32,7 +36,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss"              
             ],
             "scripts": []
           },
@@ -91,7 +95,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss"           
             ],
             "scripts": []
           }

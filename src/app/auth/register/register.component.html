@@ -1,63 +1,67 @@
-<form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
-  <div class="form-group">
-    <label for="name">שם:</label>
-    <input type="text" id="name" name="name" formControlName="name">
-    @if (registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']) {
-      <div class="error-message">
-        שדה השם הוא חובה.
-      </div>
-    }
-  </div>
-  <div class="form-group">
-    <label for="email">אימייל:</label>
-    <input type="email" id="email" name="email" formControlName="email">
-    @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']) {
-      <div class="error-message">
-        שדה האימייל הוא חובה.
-      </div>
-    }
-    @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']) {
-      <div class="error-message">
-        פורמט האימייל אינו תקין.
-      </div>
-    }
-  </div>
-  <div class="form-group">
-    <label for="password">סיסמה:</label>
-    <input type="password" id="password" name="password" formControlName="password">
-    @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']) {
-      <div class="error-message">
-        שדה הסיסמה הוא חובה.
-      </div>
-    }
-  </div>
-  <div class="form-group">
-    <label for="role">תפקיד:</label>
-    <select name="role" id="role" formControlName="role">
-      <option value="" disabled selected>בחר תפקיד</option>
-      <option value="student">תלמיד</option>
-      <option value="teacher">מורה</option>
-    </select>
-    @if (registerForm.get('role')?.touched && registerForm.get('role')?.errors?.['required']) {
-      <div class="error-message">
-        שדה התפקיד הוא חובה.
-      </div>
-    }
-  </div>
+<div class="center-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>הרשמה</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
 
-  <a [routerLink]="['/login']" class="switch-form-link">יש לך כבר חשבון?</a>
-  <button type="submit" class="register-button" [disabled]="registerForm.invalid || isSubmitting()">
-    @if (isSubmitting()) {
-      <span class="spinner">נרשם...</span>
-    } @else {
-      הרשמה
-    }
-  </button>
+        <mat-form-field>
+          <mat-label>שם</mat-label>
+          <input matInput formControlName="name" placeholder="הכנס את שמך">
+          <mat-error *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.hasError('required')">
+            שדה השם הוא חובה.
+          </mat-error>
+        </mat-form-field>
 
-  @if (errorMessage()) {
-    <div class="error-message overall-error">
-      {{ errorMessage()}}
-    </div>
-  }
-</form>
+        <mat-form-field >
+          <mat-label>אימייל</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="הכנס את האימייל שלך">
+          <mat-error *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')">
+            שדה האימייל הוא חובה.
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')">
+            פורמט האימייל אינו תקין.
+          </mat-error>
+        </mat-form-field>
 
+        <mat-form-field >
+          <mat-label>סיסמה</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="הכנס את הסיסמה שלך">
+          <mat-error *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')">
+            שדה הסיסמה הוא חובה.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>תפקיד</mat-label>
+          <mat-select formControlName="role" placeholder="בחר תפקיד">
+            <mat-option value="" disabled selected>בחר תפקיד</mat-option> <!-- זהו ה-option ברירת המחדל -->
+            <mat-option value="student">תלמיד</mat-option>
+            <mat-option value="teacher">מורה</mat-option>
+          </mat-select>
+          
+          <mat-error *ngIf="registerForm.get('role')?.touched && registerForm.get('role')?.hasError('required')">
+            שדה התפקיד הוא חובה.
+          </mat-error>
+        </mat-form-field>
+
+        <a mat-button color="accent" [routerLink]="['/login']" class="switch-form-link">כבר יש לך חשבון?</a>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid || isSubmitting()">
+          <ng-container *ngIf="isSubmitting(); else elseRegister">
+            <span>נרשם...</span>
+          </ng-container>
+          <ng-template #elseRegister>
+            הרשמה
+          </ng-template>
+        </button>
+
+        <div *ngIf="errorMessage()" class="overall-error">
+          {{ errorMessage() }}
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

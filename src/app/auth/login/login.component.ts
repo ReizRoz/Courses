@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service' // ייבוא השירות 
 import { HttpClientModule } from '@angular/common/http';  
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
 selector: 'app-login',
 standalone: true,
-imports: [CommonModule, RouterLink, ReactiveFormsModule,HttpClientModule],
+imports: [CommonModule, RouterLink, ReactiveFormsModule,HttpClientModule,MaterialModule],
 templateUrl: './login.component.html',
 styleUrl: './login.component.scss'
 })

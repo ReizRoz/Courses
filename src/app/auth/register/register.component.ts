@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service'; // ייבוא השירות   
 import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule,HttpClientModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule,HttpClientModule,MaterialModule],
         templateUrl: './register.component.html',
 styleUrl: './register.component.scss'
 })
@@ -25,7 +26,7 @@ isSubmitting = signal<boolean>(false);
           name: new FormControl('', Validators.required),
           email: new FormControl('', [Validators.required, Validators.email]),
           password: new FormControl('', Validators.required),
-          role: new FormControl('student', Validators.required)
+          role: new FormControl('', Validators.required)
         });
       }
 

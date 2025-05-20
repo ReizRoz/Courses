@@ -24,7 +24,7 @@ export class CourseDetailsComponent implements OnInit {
   userRole = signal<string | null>(null);
   userId = signal<number | null>(null);
   userName = signal<string | null>(null);
-
+  successMessage=signal<string|null>(null)
   constructor(
     private route: ActivatedRoute,
     public router: Router,
@@ -145,7 +145,7 @@ export class CourseDetailsComponent implements OnInit {
 
   // פונקציות editCourse ו-deleteCourse יצטרכו להיות ממומשות
   // בהתאם לנקודות הקצה של ה-API שלך
-  editCourse(): void {
+  updateCourse(): void {
     const courseId = this.course()?.id; // השתמש ב-course()?.id
     if (courseId) {
       this.router.navigate(['/edit-course', courseId]); // נניח שיש לך ראוט לעריכת קורס
@@ -153,25 +153,34 @@ export class CourseDetailsComponent implements OnInit {
       console.error('Cannot edit course: Course ID is missing.');
     }
   }
-
+  // **** עדכון פונקציית editCourse ****
+  editCourse(): void {
+    const courseId = this.course()?.id;
+    if (courseId) {
+      this.router.navigate(['/edit-course', courseId]); // ניווט לקומפוננטת העריכה
+    } else {
+      console.error('Cannot edit course: Course ID is missing.');
+      this.errorMessage.set('שגיאה: לא ניתן לערוך קורס ללא מזהה.');
+    }
+  }
   deleteCourse(): void {
-    const courseId = this.course()?.id; // השתמש ב-course()?.id
-    if (courseId && confirm('האם אתה בטוח שברצונך למחוק קורס זה?')) {
-      // אם יש לך נקודת קצה למחיקת קורס ב-CourseService
-      // this.courseService.deleteCourse(courseId).subscribe({
-      //   next: () => {
-      //     console.log('Course deleted successfully.');
-      //     this.router.navigate(['/courses']); // חזור לרשימת הקורסים
-      //   },
-      //   error: (error: HttpErrorResponse) => {
-      //     console.error('Error deleting course:', error);
-      //     this.errorMessage.set('שגיאה במחיקת הקורס.');
-      //   }
-      // });
-      console.log(`Deleting course with ID: ${courseId}`);
-      // כאן תוסיף את קריאת ה-service בפועל למחיקה
+    const courseId = this.course()?.id;
+    if (courseId && confirm('האם אתה בטוח שברצונך למחוק קורס זה? פעולה זו בלתי הפיכה.')) {
+      this.courseService.deleteCourse(courseId).subscribe({
+        next: () => {
+          console.log('Course deleted successfully.');
+          this.successMessage.set('הקורס נמחק בהצלחה!');
+          this.router.navigate(['/courses']); // חזור לרשימת הקורסים לאחר מחיקה
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error deleting course:', error);
+          this.errorMessage.set('שגיאה במחיקת הקורס: ' + (error.error?.message || 'אירעה שגיאה.'));
+        }
+      });
     } else if (!courseId) {
       console.error('Cannot delete course: Course ID is missing.');
+      this.errorMessage.set('שגיאה: לא ניתן למחוק קורס ללא מזהה.');
     }
   }
 }
+

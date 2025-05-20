@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
 import { tap, catchError } from 'rxjs/operators';
 // אין צורך ב-jwtDecode יותר אם לא נשתמש בו
@@ -9,6 +9,8 @@ interface RegistrationResponse {
   message: string;
   userId: number; // או string, תלוי איך השרת מחזיר את ה-ID
   token: string;
+  role: string; // ודא שהשרת מחזיר role בהרשמה
+  username?: string;
 }
 
 // נעדכן את הממשק כדי שיתאים בדיוק לתגובת השרת שקיבלת
@@ -20,15 +22,6 @@ interface LoginResponse {
   name?: string; // הוספתי ? כי לא בטוח אם השרת מחזיר name או username, תלוי במימוש השרת
 }
 
-// אין צורך בממשק הזה אם לא מפענחים את הטוקן
-// interface JwtPayload {
-//   userId: number;
-//   role: string;
-//   name?: string;
-//   exp?: number;
-//   iat?: number;
-// }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -39,9 +32,9 @@ export class AuthService {
   private readonly USER_ROLE_KEY = 'currentUserRole';
   private readonly USER_NAME_KEY = 'currentUserName'; // מפתח חדש לשם
 
-  private _currentUserId: number | null = null;
-  private _currentUserRole: string | null = null;
-  private _currentUserName: string | null = null;
+  currentUserId=signal<number | null>(null);
+  currentUserRole=signal<string | null>(null);
+  currentUserName=signal<string | null>(null);
 
   constructor(private http: HttpClient) {
     // טען את פרטי המשתמש מ-sessionStorage בעת אתחול השירות
@@ -64,9 +57,9 @@ export class AuthService {
             sessionStorage.setItem(this.USER_NAME_KEY, response.name);
           }
           // עדכון המשתנים בזיכרון ה-Service
-          this._currentUserId = response.userId;
-          this._currentUserRole = response.role;
-          this._currentUserName = response.name || null; // ודא שאתה מקבל את השם אם הוא קיים
+          this.currentUserId.set(response.userId);
+          this.currentUserRole.set(response.role);
+          this.currentUserName.set(response.name||null); // ודא שאתה מקבל את השם אם הוא קיים
         } else {
             console.error("Login response missing token!");
             this.logout();
@@ -87,17 +80,17 @@ export class AuthService {
 
   getUserId(): number | null {
     // המידע זמין ישירות מה-Service או מ-sessionStorage
-    return this._currentUserId || (sessionStorage.getItem(this.USER_ID_KEY) ? parseInt(sessionStorage.getItem(this.USER_ID_KEY)!, 10) : null);
+    return this.currentUserId() || (sessionStorage.getItem(this.USER_ID_KEY) ? parseInt(sessionStorage.getItem(this.USER_ID_KEY)!, 10) : null);
   }
 
   getUserRole(): string | null {
     // המידע זמין ישירות מה-Service או מ-sessionStorage
-    return this._currentUserRole || sessionStorage.getItem(this.USER_ROLE_KEY);
+    return this.currentUserRole() || sessionStorage.getItem(this.USER_ROLE_KEY);
   }
 
   getUserName(): string | null {
     // המידע זמין ישירות מה-Service או מ-sessionStorage
-    return this._currentUserName || sessionStorage.getItem(this.USER_NAME_KEY);
+    return this.currentUserName() || sessionStorage.getItem(this.USER_NAME_KEY);
   }
 
   isAuthenticated(): boolean {
@@ -116,9 +109,9 @@ export class AuthService {
     sessionStorage.removeItem(this.USER_ID_KEY);
     sessionStorage.removeItem(this.USER_ROLE_KEY);
     sessionStorage.removeItem(this.USER_NAME_KEY);
-    this._currentUserId = null;
-    this._currentUserRole = null;
-    this._currentUserName = null;
+    this.currentUserId.set(null);
+    this.currentUserRole.set(null);
+    this.currentUserName.set(null);
     console.log('User logged out. Token and user info cleared.');
   }
 
@@ -131,10 +124,10 @@ export class AuthService {
 
     // נוודא שקיים טוקן וגם פרטי משתמש. אם אחד מהם חסר, זה מצב לא תקין.
     if (storedToken && storedUserId && storedUserRole) {
-      this._currentUserId = parseInt(storedUserId, 10);
-      this._currentUserRole = storedUserRole;
-      this._currentUserName = storedUserName; // הקצאת השם
-      console.log('User info loaded from sessionStorage:', { userId: this._currentUserId, role: this._currentUserRole, name: this._currentUserName });
+      this.currentUserId.set(parseInt(storedUserId, 10));
+      this.currentUserRole.set(storedUserRole);
+      this.currentUserName.set(storedUserName); // הקצאת השם
+      console.log('User info loaded from sessionStorage:', { userId: this.currentUserId, role: this.currentUserRole, name: this.currentUserName });
     } else {
       this.logout(); // אם משהו חסר, נתנתק כדי למנוע מצב לא עקבי
     }
