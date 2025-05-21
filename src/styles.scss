@@ -1,16 +1,42 @@
+/* כאן תגדיר את משתני ה-CSS הגלובליים שלך */
 @use '@angular/material' as mat;
-
-$my-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$my-accent: mat.m2-define-palette(mat.$m2-pink-palette);
-$my-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-$my-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $my-primary,
-    accent: $my-accent,
-    warn: $my-warn,
-  )
-));
-
-@include mat.core();
-@include mat.all-component-themes($my-theme);
+:root {
+    --primary-blue: #007bff;
+    --primary-blue-dark: #0056b3; // לדוגמה, עבור מצב hover
+    --secondary-gold: #ffc107;
+    --secondary-gold-dark: #e0ac00; // לדוגמה, עבור מצב hover
+    --text-color-light: #ffffff;
+    --text-color-dark: #333333;
+    --border-color: #ced4da;
+    --background-light: #ffffff; // לדוגמה, לרקע קונטיינרים
+    --background-dark: #f8f9fa; /* לדוגמה, רקע כללי של האפליקציה או למצב hover */
+    --error-color: #dc3545;
+    --error-background: #f8d7da;
+    --success-color: #28a745;
+    --success-background: #d4edda;
+  }
+  
+ 
+  
+  $my-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+  $my-accent: mat.m2-define-palette(mat.$m2-pink-palette);
+  $my-warn: mat.m2-define-palette(mat.$m2-red-palette);
+  
+  $my-theme: mat.m2-define-light-theme((
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+    )
+  ));
+  
+  @include mat.core();
+  @include mat.all-component-themes($my-theme);
+  
+  /* סגנונות גלובליים */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-dark);
+  }

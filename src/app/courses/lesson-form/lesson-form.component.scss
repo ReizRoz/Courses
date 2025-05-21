@@ -1,0 +1,51 @@
+/* src/app/courses/lesson-form/lesson-form.component.scss */
+.lesson-form-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: var(--background-light); // רקע בהיר לטופס
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); // צל כבד יותר לדיאלוג
+    direction: rtl; // יישור לימין
+
+    mat-card-header {
+        padding-bottom: 20px;
+        text-align: center;
+        .mat-mdc-card-title {
+            font-size: 1.8em;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+    }
+
+    mat-card-content {
+        .full-width {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-start; // יישור הכפתורים לימין
+            gap: 10px;
+            margin-top: 20px;
+
+            button {
+                padding: 10px 15px;
+                font-size: 1em;
+                mat-icon {
+                  margin-left: 8px;
+                }
+            }
+        }
+
+        .error-message {
+            background-color: var(--error-background);
+            color: var(--error-color);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    }
+}

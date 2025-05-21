@@ -1,0 +1,38 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode() ? 'ערוך שיעור' : 'צור שיעור חדש' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+          <mat-label>כותרת השיעור</mat-label>
+          <input matInput type="text" formControlName="title" required>
+          <mat-error *ngIf="lessonForm.get('title')?.hasError('required') && lessonForm.get('title')?.touched">כותרת השיעור היא שדה חובה.</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>תוכן השיעור</mat-label>
+          <textarea matInput formControlName="content" rows="5" required></textarea>
+          <mat-error *ngIf="lessonForm.get('content')?.hasError('required') && lessonForm.get('content')?.touched">תוכן השיעור הוא שדה חובה.</mat-error>
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
+          @if (isLoading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <ng-container>
+                <mat-icon>save</mat-icon> שמור
+              </ng-container>
+          }
+        </button>
+        <button mat-button color="basic" (click)="onCancel()" type="button">
+          <mat-icon>cancel</mat-icon> ביטול
+        </button>
+      </form>
+    </mat-card-content>
+    @if (errorMessage()) {
+      <mat-card-footer>
+        <div class="error-message">{{ errorMessage() }}</div>
+      </mat-card-footer>
+    }
+  </mat-card>

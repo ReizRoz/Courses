@@ -1,96 +1,111 @@
 /* src/app/courses-list/courses-list.component.scss */
 @use "sass:color";
+
 .courses-container {
     padding: 20px;
-    background-color: var(--background-light);
+    background-color: var(--background-dark); // שימוש במשתנה (היה background-light)
     min-height: calc(100vh - 60px); /* גובה מינימלי - גובה ה-header */
     direction: rtl; /* יישור לימין */
 }
 
-h2 {
-    color: var(--primary-blue);
-    margin-bottom: 20px;
-    text-align: center;
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+
+    h1 {
+        color: var(--primary-blue);
+        font-size: 2.8em;
+        margin: 0;
+    }
+
+    // Material button `mat-raised-button` כבר יקבל עיצוב בסיסי
+    button {
+        mat-icon {
+            margin-left: 8px; // רווח בין אייקון לטקסט
+        }
+    }
 }
 
 .courses-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 25px; // הגדל מעט את המרווח
 }
 
 .course-card {
-    background-color: var(--text-color-light);
+    // MatCardModule יספק את העיצוב הבסיסי, אלו דריסות/תוספות
+    background-color: var(--background-light); // שימוש במשתנה
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // צל עמוק יותר
     padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; // אנימציה להובר
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    mat-card-header {
+        padding-bottom: 10px;
+        text-align: right; // יישור לימין
+        .mat-mdc-card-title { // Material 3 uses .mat-mdc-card-title
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--text-color-dark);
+        }
+        .mat-mdc-card-subtitle { // Material 3 uses .mat-mdc-card-subtitle
+            color: #777;
+        }
+    }
+
+    mat-card-content {
+        padding-top: 10px;
+        color: #555;
+        flex-grow: 1; // יתפוס מקום זמין
+        text-align: right; // יישור לימין
+        p {
+            margin-bottom: 8px;
+        }
+    }
+
+    mat-card-actions {
+        padding-top: 15px;
+        display: flex;
+        justify-content: flex-start; // ליישר כפתורים לימין
+        gap: 10px;
+        // כפתורי Material מטופלים על ידי ה-`color` input, אין צורך להגדיר כאן `background-color`
+    }
 }
 
-.course-card h3 {
-    color: var(--primary-blue);
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.course-card p {
-    color: var(--text-color-dark);
-    margin-bottom: 15px;
-}
-
-.actions {
+.no-courses-message,
+.loading-message {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2em;
+    color: #666;
+    background-color: var(--background-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: flex;
-    gap: 10px;
-    justify-content: flex-end; /* יישור הכפתורים לימין בתוך הכרטיס */
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; // רווח בין האלמנטים
 }
 
-.actions button {
-    background-color: var(--button-primary);
-    color: var(--text-color-light);
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    &:hover {
-        background-color: var(--button-primary-hover);
-    }
-}
-
-.actions button:last-child {
-    background-color: var(--secondary-gold); /* צבע זהב לפרטים */
-    &:hover {
-        background-color: color.adjust(#a28b17, $lightness: -10%);/* שימוש ב-darken מתוך SASS */
-    }
-}
-
-.edit-courses-button {
-    background-color: var(--button-success); /* צבע ירוק לעריכה */
-    color: var(--text-color-light);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 20px;
-    display: block; /* כדי שיתפוס שורה משלו */
-    margin-left: auto; /* ליישור לימין */
-    margin-right: auto; /* ליישור למרכז אם רוחב הדף גדול */
-    &:hover {
-        background-color: var(--button-success-hover);
-    }
-}
-
-.error {
+.error-message { // שינוי שם הקלאס מ-.error ל-.error-message
+    background-color: var(--error-background);
     color: var(--error-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 25px;
     text-align: center;
-    margin-top: 20px;
-}
-
-.loading {
-    text-align: center;
-    margin-top: 20px;
-    color: var(--text-color-dark);
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

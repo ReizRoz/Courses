@@ -1,7 +1,6 @@
 /* src/app/shared/header/header.component.scss */
 
-// הקוד הקיים שלך...
-.app-header {
+.header { /* שונה מ-.app-header ל-.header כדי להתאים ל-HTML */
     background-color: var(--text-color-light);
     color: var(--primary-blue);
     padding: 10px 20px;
@@ -9,49 +8,110 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    direction: rtl;
+    direction: rtl; /* יישור לימין של כל ההדר */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--primary-blue);
+}
+
+.nav-links {
+  a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: var(--text-color-dark);
+    font-weight: 500;
+    transition: color 0.3s ease;
+
+    &:hover, &.active-link {
+      color: var(--primary-blue);
+    }
   }
-  
-  .user-info {
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+}
+
+.login-button, .register-button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-right: 10px; /* התאמת שוליים עבור RTL */
+}
+
+.login-button {
+  background-color: var(--primary-blue);
+  color: var(--text-color-light);
+  &:hover {
+    background-color: #0056b3; /* כחול כהה יותר */
+  }
+}
+
+.register-button {
+  background-color: var(--secondary-gold);
+  color: var(--text-color-light);
+  &:hover {
+    background-color: #e0ac00; /* זהב כהה יותר */
+  }
+}
+
+.user-info {
     position: relative;
     cursor: pointer;
     margin-left: 15px;
-  }
-  
-  // הגדרות ה-CSS עבור האוואטאר
-  .avatar { /* <-- שימו לב: שיניתי מ-user-icon ל-avatar */
+}
+
+.avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: var(--secondary-gold); /* צבע זהב לאייקון */
+    background-color: var(--secondary-gold);
     color: var(--text-color-light);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.2em;
     font-weight: bold;
-  }
-  
-  .header-image {
+}
+
+.header-image {
     margin-right: 15px;
-    height: 3cm; /* הגדרת גובה התמונה ישירות על הקלאס */
+    height: 3cm;
     width: auto;
     max-width: 100%;
-  }
-  
-  .logout-menu {
+}
+
+.logout-menu {
     position: absolute;
     top: 100%;
-    left: 0;
+    right: 0; /* שונה מ-left ל-right עבור RTL */
     background-color: var(--text-color-light);
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 10;
     min-width: 120px;
-  }
-  
-  .logout-menu button {
+}
+
+.logout-menu button {
     display: block;
     width: 100%;
     padding: 10px;
@@ -61,6 +121,6 @@
     cursor: pointer;
     color: var(--text-color-dark);
     &:hover {
-      background-color: var(--background-dark);
+        background-color: var(--background-dark); /* ודא ש--background-dark מוגדר או השתמש בצבע ספציפי */
     }
-  }
+}

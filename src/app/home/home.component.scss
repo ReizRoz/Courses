@@ -4,12 +4,10 @@
   display: flex;
   height: 100vh;
   direction: rtl;
-  // position: relative; // כבר לא נחוץ כאן עבור הכפתור
 }
 
 .image-side {
   width: 66%;
-  // position: relative; // כבר לא נחוץ כאן עבור הכפתור
 }
 
 .image-side img {
@@ -28,7 +26,7 @@
   align-items: center;
   padding: 20px;
   text-align: center;
-  position: relative; // <--- חשוב מאוד: הופך את ה-text-side להורה ממוקם
+  position: relative; // הופך את ה-text-side להורה ממוקם עבור אלמנטים אבסולוטיים
 }
 
 .welcome-text {
@@ -40,12 +38,13 @@
   width: 5cm;
   height: 3cm;
   margin-top: 20px;
+  // אם משתמשים ב-ngSrc, אולי תרצו להוסיף כאן סגנונות נוספים
 }
 
 /* עיצוב לכפתור Material שממוקם אבסולוטית בתוך ה-text-side */
-.home-login-button { // משתמשים בקלאס החדש שנתנו לכפתור
+.home-login-button {
   position: absolute;
   top: 20px;
-  left: 20px; // מיקום בפינה השמאלית העליונה של ה-text-side
+  right: 20px; // שונה מ-left ל-right עבור עקביות ב-RTL
   z-index: 10; // ודא שהוא מעל אלמנטים אחרים ב-text-side
 }

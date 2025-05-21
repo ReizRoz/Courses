@@ -1,29 +1,45 @@
-<app-header></app-header>
-<div class="courses-container">
-  <h2>רשימת קורסים</h2>
-  @if (errorMessage()) {
-    <div class="error">{{ errorMessage() }}</div>
-  } @else if (courses && courses.length > 0) {
+<app-header [title]="'רשימת קורסים'"></app-header>
+
+<div class="container">
+  @if (isLoading()) {
+    <mat-spinner></mat-spinner>
+  } @else if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
+  } @else {
+    @if (authService.currentUserRole() === 'teacher') {
+      <button mat-raised-button color="primary" (click)="createNewCourse()" class="create-course-btn">
+        <mat-icon>add</mat-icon> צור קורס חדש
+      </button>
+    }
+
     <div class="courses-grid">
-      @for (course of courses; track course.id) {
-        <div class="course-card">
-          <h3>{{ course.title }}</h3>
-          <p>{{ course.description }}</p>
-          <div class="actions">
-            <button (click)="enrollOrUnenroll(course)">
-              {{ isEnrolled(course) ? 'יציאה מהקורס' : 'הרשמה לקורס' }}
+      @for (course of courses(); track course.id) {
+        <mat-card class="course-card">
+          <mat-card-header>
+            <mat-card-title>{{ course.title }}</mat-card-title>
+            <mat-card-subtitle>{{ course.description }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>מזהה מורה: {{ course.teacherId }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button color="accent" (click)="viewCourseDetails(course.id)">
+              <mat-icon>info</mat-icon> פרטים
             </button>
-            <button (click)="viewCourseDetails(course.id)">פרטים על הקורס</button>
-          </div>
-        </div>
+
+            @if (authService.currentUserRole() === 'teacher' && authService.currentUserId() === course.teacherId) {
+              <button mat-button color="primary" (click)="editCourse(course.id)">
+                <mat-icon>edit</mat-icon> ערוך
+              </button>
+              <button mat-button color="warn" (click)="deleteCourse(course.id)">
+                <mat-icon>delete</mat-icon> מחק
+              </button>
+            }
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <p>אין קורסים זמינים כרגע.</p>
       }
     </div>
-  } @else if (courses && courses.length === 0) {
-    <p>אין קורסים זמינים כרגע.</p>
-  } @else {
-    <p>טוען קורסים...</p>
-  }
-  @if (userRole() === 'teacher') {
-    <button class="edit-courses-button">עריכת קורסים</button>
   }
 </div>
