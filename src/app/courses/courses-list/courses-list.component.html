@@ -6,11 +6,7 @@
   } @else if (errorMessage()) {
     <div class="error-message">{{ errorMessage() }}</div>
   } @else {
-    @if (authService.currentUserRole() === 'teacher') {
-      <button mat-raised-button color="primary" (click)="createNewCourse()" class="create-course-btn">
-        <mat-icon>add</mat-icon> צור קורס חדש
-      </button>
-    }
+
 
     <div class="courses-grid">
       @for (course of courses(); track course.id) {
@@ -38,6 +34,12 @@
       } @empty {
         <p>אין קורסים זמינים כרגע.</p>
       }
+      
     </div>
+    @if (authService.currentUserRole() === 'teacher') {
+      <button mat-raised-button color="primary" (click)="createNewCourse()" class="create-course-btn">
+        <mat-icon>add</mat-icon> צור קורס חדש
+      </button>
+    }
   }
 </div>
