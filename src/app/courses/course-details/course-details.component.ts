@@ -7,14 +7,10 @@ import { Course, Lesson } from '../../models/course.modul'; // וודא ש-Cours
 import { AuthService } from '../../service/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatListModule } from '@angular/material/list';
-import { MatDividerModule } from '@angular/material/divider';
 import { LessonFormComponent } from '../lesson-form/lesson-form.component';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../service/user.service';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-course-details',
@@ -22,12 +18,7 @@ import { Subscription } from 'rxjs';
   imports: [
     CommonModule,
     HeaderComponent,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatListModule,
-    MatDividerModule,
+    MaterialModule,
     LessonFormComponent
   ],
   templateUrl: './course-details.component.html',
@@ -50,6 +41,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private courseService: CourseService,
     public authService: AuthService,
+    public userService: UserService,
     public router: Router
   ) {
     // ה-effect הזה יגיב לשינויים ב-course() (כאשר הקורס נטען או מתעדכן)
@@ -131,9 +123,8 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
       // אופציונלי: הוסף לוג כדי לדעת מתי זה קורה
       // console.warn('Cannot check enrollment status: Missing course, userId, or enrolledStudents array is invalid.', { currentCourse, currentUserId });
     }
+    
   }
-  
-
   toggleEnrollment(): void {
     const currentUserId = this.authService.currentUserId();
     const currentCourse = this.course();

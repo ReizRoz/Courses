@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header></app-header> 
 
 <div class="course-details-container">
   @if (errorMessage()) {
@@ -13,12 +13,14 @@
       <mat-spinner diameter="30"></mat-spinner>
       <p>טוען פרטי קורס...</p>
     </div>
-  } @else if (course()) {
+  } @else if (!course()) { 
+    <p>הקורס לא נמצא או שגיאה בטעינה.</p>
+  } @else { 
     <mat-card class="course-card">
       <mat-card-header>
         <mat-card-title>{{ course()!.title }}</mat-card-title>
-        <mat-card-subtitle>מורה: {{ course()!.teacherId }}</mat-card-subtitle>
       </mat-card-header>
+
       <mat-card-content>
         <p class="description">{{ course()!.description }}</p>
 
@@ -52,29 +54,18 @@
             <mat-icon>add</mat-icon> הוסף שיעור חדש
           </button>
         }
-      </mat-card-content>
-
-      <mat-card-actions align="end">
+      </mat-card-content> 
+      <mat-card-actions alig="end">
         @if (authService.currentUserRole() === 'student' && authService.currentUserId() !== null) {
           <button mat-raised-button [color]="isEnrolled() ? 'warn' : 'accent'" (click)="toggleEnrollment()">
             {{ isEnrolled() ? 'יציאה מהקורס' : 'הרשמה לקורס' }}
           </button>
         }
-        @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
-          <button mat-raised-button color="accent" (click)="editCourse()">
-            <mat-icon>edit</mat-icon> ערוך פרטי קורס
-          </button>
-          <button mat-raised-button color="warn" (click)="deleteCourse()">
-            <mat-icon>delete</mat-icon> מחק קורס
-          </button>
-        }
         <button mat-button (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
       </mat-card-actions>
-    </mat-card>
-  } @else {
-    <p>הקורס לא נמצא או שגיאה בטעינה.</p>
+    </mat-card> 
   }
-</div>
+</div> 
 
 @if (showLessonForm()) {
   <div class="lesson-form-overlay">

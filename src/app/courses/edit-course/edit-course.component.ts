@@ -94,7 +94,7 @@ export class EditCourseComponent implements OnInit {
         this.errorMessage.set(null);
         this.isLoading.set(false); // **סיים טעינה בהצלחה**
         // נווט בחזרה לעמוד פרטי הקורס או רשימת הקורסים
-        this.router.navigate(['/course', id]); // או היכן שמתאים
+        this.router.navigate(['/courses']); // או היכן שמתאים
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error updating course:', err);

@@ -1,32 +1,29 @@
 <header class="header">
-    <div class="logo-container">
-      <a routerLink="/" class="logo">
-        <img class=header-image src="assets/images/image2.jpg" alt="לוגו האתר">
-        <span class="site-name">e-Learning Platform</span>
-      </a>
-    </div>
+    <div class="header-right">
+      @if (isAuthenticated()) {
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-avatar-button">
+          <span class="user-avatar">{{ userNameFirstLetter() }}</span>
+        </button>
   
-    <nav class="nav-links">
-      <a routerLink="/courses" routerLinkActive="active-link">קורסים</a>
-      @if (isLoggedIn()) { @if (authService.currentUserRole() === 'teacher') { <a routerLink="/create-course" routerLinkActive="active-link">צור קורס</a>
-        }
-      }
-    </nav>
-  
-    <div class="user-actions">
-      @if (!isLoggedIn()) { <a routerLink="/login" class="login-button">התחבר</a>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>התנתקות</span>
+          </button>
+        </mat-menu>
+    
+      } 
+      @else {
+        <a routerLink="/login" class="login-button">התחבר</a>
         <a routerLink="/register" class="register-button">הירשם</a>
-      } @else {
-        <div class="user-info">
-            @if (userNameFirstLetter()) {
-              <div class="avatar" (click)="toggleLogoutMenu()">{{ userNameFirstLetter() }}</div>
-            }
-            @if (showLogoutMenu()) {
-              <div class="logout-menu">
-                <button (click)="logout()">התנתק</button>
-              </div>
-            }
-          </div>
       }
+    </div>
+    
+    <div class="header-center-title">
+      <span class="site-name">{{ title || 'e-Learning Platform' }}</span>
+    </div>
+    
+    <div class="header-left">
+      <img class="header-image" src="assets/images/image2.jpg" alt="לוגו האתר">
     </div>
   </header>

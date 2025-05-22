@@ -1,7 +1,13 @@
+// src/app/auth/auth.interceptor.ts
 import { Injectable } from '@angular/core';
-import {HttpRequest,HttpHandler,HttpEvent,HttpInterceptor} from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../service/auth.service'; // וודא/י שהנתיב נכון
+import { AuthService } from '../service/auth.service'; // וודא שהנתיב נכון לשירות שלך
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -9,18 +15,16 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const authToken = this.authService.getToken(); // קבל/י את הטוקן משירות האימות שלך
+    // השתמש בפונקציה getAuthHeaders מה-AuthService שלך
+    const authHeaders = this.authService.getAuthHeaders();
 
-    // אם קיים טוקן, שכפל/י את הבקשה והוסף/הוסיפי את כותרת ה-Authorization
-    if (authToken) {
-      // שכפול הבקשה והוספת הכותרת
-      const clonedRequest = request.clone({
-        headers: request.headers.set('Authorization', 'Bearer ' + authToken)
-      });
-      return next.handle(clonedRequest);
-    }
+    // שכפל את הבקשה והוסף את הכותרות שקיבלת מה-AuthService
+    // פונקציית clone של request מאפשרת להחליף חלקים מהבקשה (כמו כותרות)
+    const authReq = request.clone({
+      headers: authHeaders
+    });
 
-    // אם אין טוקן, המשך/המשיכי עם הבקשה המקורית
-    return next.handle(request);
+    // העבר את הבקשה המשוכפלת (עם הכותרות החדשות) לשלב הבא בשרשרת ה-Interceptors
+    return next.handle(authReq);
   }
 }

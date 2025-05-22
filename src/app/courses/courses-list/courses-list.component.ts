@@ -1,16 +1,14 @@
-// src/app/courses/courses-list/courses-list.component.ts
+
 import { Component, OnInit, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseService } from '../../service/course.service';
 import { AuthService } from '../../service/auth.service';
+import { UserService } from '../../service/user.service'; // Added UserService import - זה בסדר
 import { Course } from '../../models/course.modul';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-courses-list',
@@ -18,10 +16,7 @@ import { Subscription } from 'rxjs';
   imports: [
     CommonModule,
     HeaderComponent,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule
+    MaterialModule
   ],
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.scss']
@@ -34,9 +29,10 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   private courseSubscription: Subscription | undefined;
 
   constructor(
-    private courseService: CourseService,
-    public authService: AuthService, // נשאר public לגישה מה-HTML
-    private router: Router
+    public courseService: CourseService,
+    public authService: AuthService,
+    private router: Router,
+    private userService: UserService // UserService מוזרק כאן
   ) {}
 
   ngOnInit(): void {
@@ -44,8 +40,7 @@ export class CoursesListComponent implements OnInit, OnDestroy {
       this.router.navigate(['/login']);
       return;
     }
-    // נטען את כל הקורסים. פונקציונליות "קורסים רשומים" ספציפית
-    // תטופל ב-CourseDetailsComponent על בסיס נתוני ה-enrolledStudents בקורס עצמו.
+
     this.loadCourses();
   }
 
@@ -70,11 +65,9 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   }
 
   viewCourseDetails(courseId: number): void {
-    // שנה מ-'/course-details' ל-'/course'
     this.router.navigate(['/course', courseId]);
   }
 
-  // מתודות לעריכה ומחיקה של קורסים (למורים)
   editCourse(courseId: number): void {
     this.router.navigate(['/edit-course', courseId]);
   }
@@ -83,8 +76,7 @@ export class CoursesListComponent implements OnInit, OnDestroy {
     if (confirm('האם אתה בטוח שברצונך למחוק קורס זה?')) {
       this.courseService.deleteCourse(courseId).subscribe({
         next: () => {
-          this.errorMessage.set(null); // נקה שגיאות קודמות
-          // רענן את רשימת הקורסים לאחר המחיקה
+          this.errorMessage.set(null);
           this.loadCourses();
         },
         error: (error) => {

@@ -4,12 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CourseService } from '../../service/course.service';
 import { Lesson } from '../../models/course.modul';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon'; // **ייבוא חדש**
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-lesson-form',
@@ -17,12 +12,7 @@ import { MatIconModule } from '@angular/material/icon'; // **ייבוא חדש**
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatIconModule // **הוספה לרשימת ה-imports**
+    MaterialModule
   ],
   templateUrl: './lesson-form.component.html',
   styleUrls: ['./lesson-form.component.scss']
@@ -51,7 +41,6 @@ export class LessonFormComponent implements OnInit {
     });
   }
 
-  // שים לב: שיניתי את השם ל-onSubmit כדי להתאים ל-HTML
   onSubmit(): void {
     this.errorMessage.set(null);
     this.isLoading.set(true);
@@ -62,12 +51,11 @@ export class LessonFormComponent implements OnInit {
       return;
     }
 
-// לדוגמה, אם ה-courseId זמין לך כ-courseId: number
-const lessonData = {
-  title: this.lessonForm.value.title as string,
-  content: this.lessonForm.value.content as string,
-  courseId: this.courseId // או איך שלא תקבל את ה-courseId
-};
+    const lessonData = {
+      title: this.lessonForm.value.title as string,
+      content: this.lessonForm.value.content as string,
+      courseId: this.courseId
+    };
 
     if (this.isEditMode() && this.lesson) {
       this.courseService.updateLesson(this.courseId, this.lesson.id, lessonData).subscribe({

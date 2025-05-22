@@ -35,9 +35,6 @@ this.authService.login(this.loginForm.value).subscribe({//תאזין למה שח
 next: (response) => {//מה זה נNEXT המהרה על משתנה או מילה שמורה
   this.isSubmitting.set(false);
 console.log('התחברות הצליחה:', response);
-localStorage.setItem('token', response.token);
-localStorage.setItem('userId', response.userId.toString());
-localStorage.setItem('role', response.role);
 this.router.navigate(['/courses']);
 },
 error: (error) => {

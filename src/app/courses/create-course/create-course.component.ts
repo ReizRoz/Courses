@@ -6,11 +6,7 @@ import { Router } from '@angular/router';
 import { CourseService } from '../../service/course.service';
 import { AuthService } from '../../service/auth.service';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-create-course',
@@ -19,11 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     CommonModule,
     HeaderComponent,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule
+    MaterialModule
   ],
   templateUrl: './create-course.component.html',
   styleUrls: ['./create-course.component.scss']
@@ -37,8 +29,8 @@ export class CreateCourseComponent implements OnInit {
 // ...
 constructor(
   private fb: FormBuilder,
-  private courseService: CourseService,
-  private authService: AuthService,
+  public courseService: CourseService,
+  public authService: AuthService,
   public router: Router // שנה ל-public
 ) {}
 //
@@ -87,6 +79,7 @@ constructor(
         this.isLoading.set(false);
         this.courseForm.reset();
         // אולי נווט למסך אחר או רענן את רשימת הקורסים
+        this.router.navigate(['/courses']);
       },
       error: (error) => {
         console.error('Error creating course:', error);

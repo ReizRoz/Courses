@@ -1,56 +1,48 @@
 // src/app/shared/header/header.component.ts
-import { Component, OnInit, computed, signal } from '@angular/core'; // הוספת computed
-import { CommonModule, NgIf } from '@angular/common'; // הוספת NgIf
-import { RouterLink, Router } from '@angular/router'; // הוספת RouterLink
+import { Component, computed, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
+
+// ייבוא מודולים של Angular Material אם אתה משתמש בהם לאייקון/כפתור
+import { MatButtonModule } from '@angular/material/button'; 
+import { MatIconModule } from '@angular/material/icon'; 
+import { MatMenuModule } from '@angular/material/menu'; // נדרש אם אתה רוצה תפריט התנתקות כמו שהצעתי קודם
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  // ודא ש-RouterLink ו-NgIf מיובאים
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatButtonModule, // הוסף אם לא היה
+    MatIconModule,   // הוסף אם לא היה
+    MatMenuModule    // הוסף אם אתה רוצה תפריט
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-  // אין צורך ב-loggedInUserName או userRole כ-signals נפרדים שצריך לעדכן ידנית.
-  // אנחנו נשתמש ב-computed signals או ניגש ישירות ל-AuthService.signals().
+export class HeaderComponent {
+  @Input() title?: string;
 
-  // computed signal לשם המשתמש (אות ראשונה)
-  userNameFirstLetter = computed(() => {
-    const name = this.authService.currentUserName();
-    return name ? name.charAt(0).toUpperCase() : null;
-  });
+  // הסיגנלים של ה-AuthService זמינים ישירות (או דרך מאפיינים מוגדרים בקונסטרוקטור)
+  // כיוון ש-authService מוזרק כ-public, ניתן לגשת ישירות לסיגנלים שלו
+  // אבל הדרך המומלצת יותר, במיוחד אם authService היה private, היא להגדיר אותם כך:
+  isAuthenticated = computed(() => this.authService.isAuthenticated());
+  userNameFirstLetter = computed(() => this.authService.getUserNameFirstLetter());
 
-  // computed signal לבדיקת מצב ההתחברות
-  // למרות ש-authService.isAuthenticated() כבר קיים, זו דוגמה ל-computed signal פשוט
-  isLoggedIn = computed(() => this.authService.isAuthenticated());
-
-  // signal לשליטה בתפריט ההתנתקות
-  showLogoutMenu = signal<boolean>(false);
 
   constructor(
-    // הזרק את AuthService כ-public כדי שיהיה נגיש ב-template
-    public authService: AuthService,
+    public authService: AuthService, // וודא שזה public כדי לגשת ב-HTML ישירות ל-authService.isAuthenticated וכו'
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    // עם Angular Signals, אין צורך ב-ngOnInit כדי להאזין לשינויים ב-AuthService
-    // אם ה-AuthService משתמש ב-signals כמו שצריך, הקומפוננטה תגיב לשינויים באופן אוטומטי
-    // ו-computed signals יחושבו מחדש.
-    // לכן, אין צורך ב-loadUserData() או ב-authSubscription כאן.
-  }
-
-  toggleLogoutMenu(): void {
-    this.showLogoutMenu.update(value => !value);
+  ) {
+    // אם authService היה private, היית צריך להגדיר את הסיגנלים כאן כמו בתשובה הקודמת:
+    // this.isAuthenticated = this.authService.isAuthenticated;
+    // this.userNameFirstLetter = this.authService.getUserNameFirstLetter;
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']); // ניווט לדף ההתחברות לאחר יציאה
+    this.router.navigate(['/']);
   }
-
-  // אין צורך ב-ngOnDestroy או ב-authSubscription כשמשתמשים ב-Signals
-  // Angular מנהל את ה-lifecycle של Signals באופן אוטומטי.
 }
