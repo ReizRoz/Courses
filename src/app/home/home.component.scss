@@ -41,6 +41,8 @@
   width: 5cm;
   height: 3cm;
   margin-top: 20px;
+    border: 2px solid var(--color-white) !important; // מסגרת לבנה
+    box-shadow: 0 0 25px rgba(255, 255, 255, 1)
 }
 
 .home-login-button {

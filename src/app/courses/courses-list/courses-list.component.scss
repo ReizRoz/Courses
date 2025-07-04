@@ -58,19 +58,17 @@
         color: var(--text-on-light); // טקסט שחור על רקע לבן
         flex-grow: 1;
         p {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+
         }
     }
-
     .card-actions-bottom {
         padding-top: 20px;
         display: flex;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        gap: 10px;
+        gap: 1px;
         margin-top: auto;
-
-      
     }
 }
 

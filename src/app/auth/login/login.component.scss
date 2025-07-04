@@ -20,7 +20,9 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: var(--background-light); // רקע בהיר (לבן)
+  background-color: var(--background-light);
+  border: 2px solid var(--color-white) !important; // מסגרת לבנה
+  box-shadow: 0 0 25px rgba(255, 255, 255, 1) // רקע בהיר (לבן)
   
   // ה-mat-card מקבל כבר מסגרת כחולה והילה מהסגנונות הגלובליים (styles.scss)
   // ולכן אין צורך להוסיף כאן סגנונות כפולים למסגרת/הילה.

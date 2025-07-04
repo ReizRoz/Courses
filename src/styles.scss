@@ -11,12 +11,9 @@
     --color-white: #ffffff;
 
     --error-color: #dc3545;
-    --success-color: #28aa28;
+    --success-color: #021b02;
 
-    // צבעים לגרדיאנט ירוק-תכלת
-    --gradient-start-color: #00FFC0;
-    --gradient-end-color: #00BFFF;
-
+ 
     // צבעי טקסט כלליים
     --text-on-dark: var(--color-white); // לבן על רקעים כהים
     --text-on-light: var(--color-black); // שחור על רקעים בהירים (למשל בכרטיסים)
@@ -29,7 +26,7 @@
 
     // צבעי הודעות (שגיאה/הצלחה)
     --error-background: #{color.adjust(#dc3545, $lightness: 35%, $alpha: -0.6)};
-    --success-background: #{color.adjust(#28aa28, $lightness: 35%, $alpha: -0.6)};
+    --success-background: #{color.adjust(#0c240c, $lightness: 35%, $alpha: -0.6)};
 
     // צבעי גבולות וקווי הפרדה
     --border-color-default: var(--color-white); // לבן
@@ -40,7 +37,7 @@
 // primary: תהיה כחולה, כיוון שרוב הכפתורים יהיו כחולים
 $my-primary: mat.m2-define-palette(mat.$m2-blue-palette, 600, 400, 800); // 600 הוא גוון כחול יפה
 // accent: נגדיר אותה לצבע משני כלשהו, היא פחות קריטית כעת.
-$my-accent: mat.m2-define-palette(mat.$m2-green-palette, A400, A200, A700);
+$my-accent: mat.m2-define-palette(mat.$m2-green-palette, 500, 200, 700);
 $my-warn: mat.m2-define-palette(mat.$m2-red-palette, 700, 500, 900);
 
 $my-theme: mat.m2-define-light-theme((
@@ -137,7 +134,7 @@ button.mat-mdc-raised-button.app-avatar-button {
     margin: 20px auto;
     max-width: 600px;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(13, 166, 44, 0.1);
     gap: 10px;
     text-align: center;
 
@@ -172,8 +169,7 @@ mat-card {
     position: relative;
     padding: 24px;
     z-index: 0;
-
-    border: 2px solid var(--color-blue); // מסגרת כחולה
+    border: 2px solid var(--color-blue) !important; // מסגרת כחולה
     box-shadow: 0 0 20px var(--color-blue); // הילה כחולה קבועה - הגדלנו את הגודל
 
 
@@ -216,6 +212,6 @@ mat-divider {
 // --- HEADER (נניח mat-toolbar או עם קלאס app-header) ---
 // אם ה-header הוא mat-toolbar, זה יחיל עליו את הצבע
 mat-toolbar, .app-header {
-    background-color: var(--color-blue) !important; // רקע כחול
-    color: var(--text-on-dark) !important; // טקסט לבן
+    background-color: var(--color-blue); // רקע כחול
+    color: var(--text-on-dark); // טקסט לבן
 }

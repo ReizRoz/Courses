@@ -21,8 +21,8 @@
               <mat-card-title>{{ course.title }}</mat-card-title>
               <mat-card-subtitle>{{ course.description }}</mat-card-subtitle>
             <mat-card-actions class="card-actions-bottom">
-              <button mat-button color="primary" (click)="viewCourseDetails(course.id)">
-               <p>לרשימת השיעורים</p>
+              <button mat-button color="accent" (click)="viewCourseDetails(course.id)">
+               <h4>לרשימת השיעורים</h4>
               </button>
 
               @if (authService.currentUserRole() === 'teacher' && authService.currentUserId() === course.teacherId) {
