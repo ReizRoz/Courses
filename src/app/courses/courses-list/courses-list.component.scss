@@ -55,22 +55,6 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
-    mat-card-header {
-        padding-bottom: 15px;
-        
-        .mat-mdc-card-title {
-            font-size: 1.6em;
-            font-weight: 700;
-            color: var(--color-blue); // כותרת כחולה
-            line-height: 1.3;
-        }
-        .mat-mdc-card-subtitle {
-            color: var(--text-on-light); // טקסט משני כהה על רקע בהיר (לבן)
-            font-size: 1em;
-            line-height: 1.4;
-        }
-    }
-
     mat-card-content {
         padding-top: 10px;
         color: var(--text-on-light); // טקסט שחור על רקע לבן

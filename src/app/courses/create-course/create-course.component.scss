@@ -19,16 +19,6 @@
     max-width: 650px;
     margin: 20px 0;
 
-    mat-card-header {
-        margin-bottom: 30px;
-        text-align: center;
-
-        .mat-mdc-card-title {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: var(--primary-color); // השתמש במשתנה
-        }
-    }
 }
 
 .course-form {
@@ -70,9 +60,6 @@
     .form-card {
         padding: 20px;
     }
-    mat-card-header .mat-mdc-card-title {
-        font-size: 2em;
-    }
     .form-actions {
         flex-direction: column;
         align-items: stretch;
@@ -93,8 +80,5 @@
     .form-card {
         padding: 15px;
         border-radius: 8px;
-    }
-    mat-card-header .mat-mdc-card-title {
-        font-size: 1.8em;
     }
 }

@@ -81,22 +81,6 @@
     // margin-top: 20px; // ניתן להוסיף רווח עליון ותחתון אם רוצים, אך אם ה-wrapper מטפל בזה, זה מיותר.
     // margin-bottom: 20px;
 
-    mat-card-header {
-        padding-bottom: 20px;
-        text-align: right;
-
-        .mat-mdc-card-title {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: var(--primary-color); // השתמש במשתנה
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
-        .mat-mdc-card-subtitle {
-            color: var(--text-color-secondary);
-        }
-    }
-
     mat-card-content {
         padding-top: 20px;
         color: var(--text-color-dark); // השתמש במשתנה
