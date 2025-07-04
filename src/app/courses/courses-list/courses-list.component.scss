@@ -1,111 +1,192 @@
-/* src/app/courses-list/courses-list.component.scss */
 @use "sass:color";
 
-.courses-container {
-    padding: 20px;
-    background-color: var(--background-dark); // שימוש במשתנה (היה background-light)
-    min-height: calc(100vh - 60px); /* גובה מינימלי - גובה ה-header */
-    direction: rtl; /* יישור לימין */
+.courses-page-wrapper {
+    padding: 30px 20px;
+    background-color: var(--background-dark);
+    min-height: calc(100vh - 60px);
+    direction: rtl;
+    text-align: right;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.header-section {
+.loading-spinner-container {
+    // יורש מהגלובלי
+}
+
+.error-message {
+    // יורש מהגלובלי
+    margin: 30px auto; // ספציפי למיקום המארג'ינים
+}
+
+.courses-content {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #eee;
-
-    h1 {
-        color: var(--primary-blue);
-        font-size: 2.8em;
-        margin: 0;
-    }
-
-    // Material button `mat-raised-button` כבר יקבל עיצוב בסיסי
-    button {
-        mat-icon {
-            margin-left: 8px; // רווח בין אייקון לטקסט
-        }
-    }
+    gap: 30px;
 }
 
 .courses-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px; // הגדל מעט את המרווח
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+    align-items: stretch;
 }
 
 .course-card {
-    // MatCardModule יספק את העיצוב הבסיסי, אלו דריסות/תוספות
-    background-color: var(--background-light); // שימוש במשתנה
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // צל עמוק יותר
-    padding: 15px;
+    background-color: var(--background-light);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; // אנימציה להובר
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
 
     &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-8px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
 
     mat-card-header {
-        padding-bottom: 10px;
-        text-align: right; // יישור לימין
-        .mat-mdc-card-title { // Material 3 uses .mat-mdc-card-title
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--text-color-dark);
+        padding-bottom: 15px;
+        
+        .mat-mdc-card-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--color-blue); // כותרת כחולה
+            line-height: 1.3;
         }
-        .mat-mdc-card-subtitle { // Material 3 uses .mat-mdc-card-subtitle
-            color: #777;
+        .mat-mdc-card-subtitle {
+            color: var(--text-on-light); // טקסט משני כהה על רקע בהיר (לבן)
+            font-size: 1em;
+            line-height: 1.4;
         }
     }
 
     mat-card-content {
         padding-top: 10px;
-        color: #555;
-        flex-grow: 1; // יתפוס מקום זמין
-        text-align: right; // יישור לימין
+        color: var(--text-on-light); // טקסט שחור על רקע לבן
+        flex-grow: 1;
         p {
             margin-bottom: 8px;
         }
     }
 
-    mat-card-actions {
-        padding-top: 15px;
+    .card-actions-bottom {
+        padding-top: 20px;
         display: flex;
-        justify-content: flex-start; // ליישר כפתורים לימין
+        flex-wrap: wrap;
+        justify-content: flex-start;
         gap: 10px;
-        // כפתורי Material מטופלים על ידי ה-`color` input, אין צורך להגדיר כאן `background-color`
+        margin-top: auto;
+
+        // *** סגנונות לכפתורי אייקון עריכה/מחיקה בתוך הכרטיס ***
+        button[mat-icon-button], a[mat-icon-button] {
+            // מאפס את ברירות המחדל של כפתור Material לאייקון
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0;
+            min-width: unset;
+            height: unset;
+            line-height: unset;
+            transition: background-color 0.2s ease; // מעבר חלק לרקע בהובר
+
+            .mat-mdc-button-persistent-ripple {
+                display: none !important; // הסתר את אפקט הריפל אם לא רוצים אותו
+            }
+
+            mat-icon {
+                font-size: 24px; // גודל אייקון
+                height: 24px;
+                width: 24px;
+                color: var(--color-blue) !important; // *** אייקון כחול ***
+            }
+            &:hover {
+                background-color: rgba(0, 69, 184, 0.1) !important; // רקע כחול שקוף עדין בהובר
+                border-radius: 50%; // רקע עגול
+            }
+        }
     }
 }
 
-.no-courses-message,
-.loading-message {
+.no-courses-message {
+    grid-column: 1 / -1;
     text-align: center;
-    padding: 50px;
-    font-size: 1.2em;
-    color: #666;
-    background-color: var(--background-light);
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 80px 20px;
+    font-size: 1.4em;
+    color: var(--text-secondary); // לבן
+    background-color: var(--background-light); // לבן
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; // רווח בין האלמנטים
+    justify-content: center;
+    gap: 20px;
+    min-height: 200px;
 }
 
-.error-message { // שינוי שם הקלאס מ-.error ל-.error-message
-    background-color: var(--error-background);
-    color: var(--error-color);
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 25px;
-    text-align: center;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.create-course-btn {
+    margin-top: 40px;
+    font-size: 1.1em;
+    padding: 12px 25px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    
+    // *** סגנונות ספציפיים לכפתור "צור קורס חדש" ***
+    background-color: var(--color-white) !important; // רקע לבן
+    border: 2px solid var(--color-blue) !important; // מסגרת כחולה
+    color: var(--color-blue) !important; // טקסט כחול
+    
+    .mdc-button__label {
+        color: var(--color-blue) !important;
+    }
+    --mat-mdc-button-label-text-color: var(--color-blue) !important;
+    --mat-mdc-button-icon-color: var(--color-blue) !important; // אייקון כחול
+
+    &:hover {
+        background-color: rgba(0, 69, 184, 0.05) !important; // רקע כחול שקוף עדין מאוד בהובר
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25) !important; // צל חזק יותר
+    }
+
+    mat-icon {
+        margin-left: 8px;
+        color: var(--color-blue) !important; // וודא שהאייקון בתוך הכפתור כחול
+    }
+}
+
+// Media Queries for Responsiveness
+@media (max-width: 900px) {
+    .courses-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .courses-page-wrapper {
+        padding: 60px 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+    .course-card {
+        padding: 15px;
+    }
+    mat-card-title {
+        font-size: 1.3em !important;
+    }
+    .create-course-btn {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
 }

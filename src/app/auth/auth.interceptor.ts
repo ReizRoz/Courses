@@ -1,30 +1,53 @@
 // src/app/auth/auth.interceptor.ts
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse // ייבוא HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from '../service/auth.service'; // וודא שהנתיב נכון לשירות שלך
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators'; // ייבוא catchError
+import { AuthService } from '../service/auth.service'; // וודא שהנתיב נכון לשירות שלך (זהו הנתיב המקורי שלך)
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {}
+  // שינוי הקונסטרוקטור: הזריק Injector במקום AuthService ישירות
+  // זה נחוץ כדי למנוע "תלות מעגלית" במקרים מסוימים שבהם ה-AuthService
+  // עצמו משתמש ב-HttpClient (וזהו המצב שלך).
+  constructor(private injector: Injector) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // השתמש בפונקציה getAuthHeaders מה-AuthService שלך
-    const authHeaders = this.authService.getAuthHeaders();
+    // השתמש ב-Injector כדי לקבל את המופע של AuthService רק כאשר הוא נדרש
+    const authService = this.injector.get(AuthService);
+    const authToken = authService.getToken(); // קבל את הטוקן הגולמי מה-AuthService
 
-    // שכפל את הבקשה והוסף את הכותרות שקיבלת מה-AuthService
-    // פונקציית clone של request מאפשרת להחליף חלקים מהבקשה (כמו כותרות)
-    const authReq = request.clone({
-      headers: authHeaders
-    });
+    // שכפל את הבקשה והוסף את כותרת ה-Authorization אם קיים טוקן
+    let authReq = request; // התחל עם הבקשה המקורית
+    if (authToken) {
+      authReq = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${authToken}` // בניית כותרת ה-Authorization
+        }
+      });
+    }
 
-    // העבר את הבקשה המשוכפלת (עם הכותרות החדשות) לשלב הבא בשרשרת ה-Interceptors
-    return next.handle(authReq);
+    // העבר את הבקשה המטופלת (עם הטוקן או בלעדיו) לשלב הבא בשרשרת ה-Interceptors
+    // הוספת טיפול בשגיאות 401 (Unauthorized)
+    return next.handle(authReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // אם השרת החזיר 401, זה יכול להעיד על טוקן לא תקף/פג תוקף/חסר.
+        // במצב כזה, ננתק את המשתמש.
+        if (error.status === 401) {
+          console.warn('AuthInterceptor: Unauthorized request (401). Logging out...');
+          authService.logout(); // קריאה לפונקציית ה-logout ב-AuthService
+          // אופציונלי: הצג הודעה למשתמש
+        }
+        // זרוק את השגיאה הלאה כדי שרכיבים אחרים יוכלו לטפל בה
+        return throwError(() => error);
+      })
+    );
   }
 }

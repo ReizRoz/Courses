@@ -1,143 +1,300 @@
-/* src/app/courses/course-details/course-details.component.scss */
 @use "sass:color";
 
-.course-details-container {
-    padding: 20px;
+.course-details-wrapper {
+    // השארנו את ה-padding הקיים.
+    // אם ה-header הוא 9vh, אז ה-min-height של ה-wrapper צריך להתחשב בזה.
+    min-height: calc(100vh - 9vh); // התאמה לגובה ההדר (אם הוא 9vh)
+    padding: 30px 20px;
     background-color: var(--background-dark);
-    min-height: calc(100vh - 60px);
     direction: rtl;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; // יישור למעלה
+    justify-content: center; // ממקם את הקארד במרכז
+    align-items: flex-start;
+
+    // **הוספנו padding לקונטיינר החיצוני (`.course-details-wrapper`)**
+    // **כדי להקטין את השטח הזמין לכרטיס מכל 4 הצדדים באופן גלוי יותר.**
+    // זה יגרום לכרטיס להתרחק מקצוות הדפדפן (או האלמנט האב של ה-wrapper).
+    // ניתן לשחק עם הערכים. 50px מכל כיוון נותן מרווח משמעותי.
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px; // אפשר להשאיר את הקיים או להגדיל
+    padding-bottom: 30px; // אפשר להשאיר את הקיים או להגדיל
+    
+    // בגלל השינוי הזה, אולי נצטרך להתאים את ה-padding הקיים ל-30px 20px
+    // אם לא רוצים רווח כפול. נשנה אותו ל-0 ונסתמך על ה-padding החדש.
+    // padding: 0; // ביטלתי את ה padding המקורי
 }
 
-.loading-message,
-.error-message {
+
+// הודעות כלליות (שגיאה, הצלחה, מידע) - כעת יורשות מהגלובלי, נשאר רק מה שספציפי
+.message-box {
+    margin: 20px auto; // ספציפי למיקום המארג'ינים
+    // כדי לוודא שזה לא תופס את כל הרוחב
+    max-width: 600px; // הגבלת רוחב גם להודעות
+}
+
+.info-message { // הודעת קורס לא נמצא או אין שיעורים
     text-align: center;
-    padding: 20px;
-    margin-top: 50px;
-    font-size: 1.2em;
-    color: var(--text-color-dark);
+    padding: 40px 20px;
+    margin: 20px auto;
+    font-size: 1.1em;
+    color: var(--text-color-secondary);
     background-color: var(--background-light);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 600px; // הגבלת רוחב גם להודעות אינפו
+
+    mat-icon {
+        font-size: 40px;
+        height: 40px;
+        width: 40px;
+        color: var(--primary-color); // השתמש במשתנה
+    }
+    p {
+        margin: 0;
+    }
 }
 
-.error-message {
-    color: var(--error-color);
-    background-color: var(--error-background);
+// מצב טעינה - כעת יורש מהגלובלי
+.loading-state {
+    // השתמש בסגנונות הגלובליים
+    margin-top: 50px; // כדי לא להתנגש עם ההדר
+    margin-bottom: 20px; // רווח תחתון
 }
 
-.success-message {
-  background-color: var(--success-background);
-  color: var(--success-color);
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 25px;
-  text-align: center;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 
-.course-card {
+// הכרטיס הראשי של פרטי הקורס
+.course-main-card {
     background-color: var(--background-light);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-    width: 100%;
-    max-width: 800px; // הגבל רוחב לפרטי הקורס
-    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 25px; // **הקטנה קלה של הריפוד הפנימי מ-30px ל-25px**
+    width: 100%; // שהכרטיס ייקח את כל הרוחב הזמין בתוך ה-wrapper (שכעת קטן יותר)
+    max-width: 800px; // **הקטנה נוספת של הרוחב המקסימלי (מ-900px ל-800px לדוגמה)**
+                      // שחק עם הערך הזה (לדוגמה 750px, 700px) כדי לקבל את האפקט הרצוי.
+    margin: 0 auto; // מרכוז אופקי בתוך ה-wrapper (אם יש רווחים)
+    // margin-top: 20px; // ניתן להוסיף רווח עליון ותחתון אם רוצים, אך אם ה-wrapper מטפל בזה, זה מיותר.
+    // margin-bottom: 20px;
 
     mat-card-header {
-        padding-bottom: 15px;
+        padding-bottom: 20px;
         text-align: right;
+
         .mat-mdc-card-title {
-            font-size: 2em;
-            font-weight: bold;
-            color: var(--primary-blue);
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color); // השתמש במשתנה
+            line-height: 1.2;
+            margin-bottom: 5px;
         }
         .mat-mdc-card-subtitle {
-            color: #777;
+            color: var(--text-color-secondary);
         }
     }
 
     mat-card-content {
-        padding-top: 15px;
-        color: #555;
+        padding-top: 20px;
+        color: var(--text-color-dark); // השתמש במשתנה
         text-align: right;
 
-        .description {
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
         h3 {
-            color: var(--primary-blue);
-            margin-top: 20px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+            color: var(--primary-color); // השתמש במשתנה
+            margin-top: 35px;
+            margin-bottom: 18px;
+            border-bottom: none;
+            padding-bottom: 8px;
+            font-size: 1.6em;
+            font-weight: 600;
         }
 
-        mat-list {
+        .description {
+            font-size: 1.15em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: var(--text-color-dark); // השתמש במשתנה
+        }
+
+        .lessons-list {
             padding: 0;
-            margin-bottom: 20px;
-            .mat-mdc-list-item { // Material 3 class
-                background-color: #f9f9f9;
-                border-radius: 4px;
-                margin-bottom: 8px;
-                padding: 10px 15px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            
+            .lesson-list-item {
+                background-color: var(--background-light);
+                border-radius: 8px;
+                margin-bottom: 12px;
+                padding: 15px 20px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
                 display: flex;
+                flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+                transition: box-shadow 0.2s ease;
 
-                .mat-mdc-list-item-title { // Material 3 class
-                    font-weight: bold;
-                    color: var(--text-color-dark);
+                // **הקטנת רוחב פריטי השיעורים גם כן**
+                max-width: 90%; // הקטנתי מ-80% ל-90% כדי לתת קצת יותר רוחב
+                margin-inline: auto; // כדי למרכז אותם בתוך ה-card
+
+                &:hover {
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+                }
+
+                .lesson-content {
+                    display: flex;
+                    flex-direction: column;
                     flex-grow: 1;
+                    text-align: right;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                    flex-basis: 70%;
+                    min-width: 0;
                 }
-                .mat-mdc-list-item-line { // Material 3 class
-                    color: #666;
-                    font-size: 0.9em;
+
+                .lesson-title {
+                    font-weight: bold;
+                    font-size: 1.2em;
+                    color: var(--primary-color); // השתמש במשתנה
+                    margin-bottom: 5px;
                 }
-                .mat-mdc-list-item-meta { // Material 3 class
+                .lesson-description {
+                    color: var(--text-color-secondary);
+                    font-size: 1em;
+                    line-height: 1.5;
+                }
+                .lesson-actions {
                     display: flex;
                     gap: 5px;
-                    margin-left: 10px; // רווח בין הטקסט לכפתורים
+                    margin-right: 15px;
+                    flex-shrink: 0;
+                    flex-basis: 30%;
+                    justify-content: flex-end;
                 }
+            }
+            mat-divider {
+                display: none;
             }
         }
 
         .add-lesson-button {
-            margin-top: 20px;
+            margin-top: 30px;
             width: fit-content;
-            display: block; // כדי שיהיה בשורה משלו
-            margin-left: auto; // ליישור לימין ב-RTL
+            display: block;
+            margin-left: auto;
             margin-right: 0;
+            font-size: 1em;
+            padding: 8px 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            
+            mat-icon {
+                font-size: 20px;
+                height: 20px;
+                width: 20px;
+                margin-left: 5px;
+                vertical-align: middle;
+            }
         }
     }
 
-    mat-card-actions {
-        padding-top: 20px;
+    .course-actions {
+        padding-top: 30px;
         display: flex;
-        justify-content: flex-start; // יישור הכפתורים לימין
-        gap: 10px;
-        flex-wrap: wrap; // כדי שיעברו שורה במסכים קטנים
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        button {
+            font-size: 1em;
+            padding: 8px 18px;
+            border-radius: 20px;
+        }
+        .mat-mdc-raised-button {
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
     }
 }
 
-// --- סטיילינג עבור שכבת העל של טופס השיעורים ---
 .lesson-form-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); // רקע שחור שקוף
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; // וודא שהוא מעל כל שאר התוכן
+    z-index: 1000;
+}
+
+// Media Queries for Responsiveness
+@media (max-width: 900px) {
+    .course-main-card {
+        padding: 20px;
+        max-width: 95%; // כדי להשאיר מרווח כלשהו מהצדדים גם במסכים קטנים
+    }
+    mat-card-header .mat-mdc-card-title {
+        font-size: 2em;
+    }
+    mat-card-content h3 {
+        font-size: 1.4em;
+    }
+    mat-card-content .description {
+        font-size: 1.05em;
+    }
+    .lessons-list {
+        margin-inline: 0; // וודא שאין margin-inline עודף
+    }
+    .lesson-list-item {
+        max-width: 95%; // התאמה של רוחב פריטי השיעורים
+        flex-direction: column;
+        align-items: flex-start;
+        
+        .lesson-content {
+            width: 100%;
+            flex-basis: auto;
+        }
+        .lesson-actions {
+            margin-right: 0;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: flex-end;
+            flex-basis: auto;
+        }
+    }
+    .course-actions {
+        flex-direction: column;
+        align-items: stretch;
+        button {
+            width: 100%;
+        }
+    }
+    .message-box, .info-message {
+        max-width: 90%;
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .course-details-wrapper {
+        padding: 15px; // הקטנת ה-padding הכללי במסכים קטנים מאוד
+    }
+    .course-main-card {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    mat-card-header .mat-mdc-card-title {
+        font-size: 1.8em;
+    }
+    .lessons-list {
+        margin-inline: 0;
+    }
+    .lesson-list-item {
+        padding: 10px 15px;
+    }
 }

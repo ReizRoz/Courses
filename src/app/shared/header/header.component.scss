@@ -1,91 +1,102 @@
-/* src/app/shared/header/header.component.scss */
+@use "sass:color";
+@use '@angular/material' as mat;
 
 .header {
-    display: flex;
-    justify-content: space-between; /* דוחף את שלושת האלמנטים לקצוות ולמרכז */
-    align-items: center; /* מרכז אנכית */
-    background-color: #3f51b5; /* Primary Material Blue */
-    color: white;
-    padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    direction: rtl; /* יישור מימין לשמאל לכל ה-Header */
-    height: 64px; /* גובה קבוע ל-Header */
-    box-sizing: border-box;
+  height: 15vh;
+  background-color: var(--color-blue);
+  color: var(--text-on-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  direction: rtl;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .header-image {
+    height: 85%;
+    object-fit: contain;
   }
-  
-  /* קונטיינר צד ימין (פעולות משתמש / אווטאר) */
-  .header-right { /* כעת זה הצד הימני (אווטאר) */
-    display: flex;
-    align-items: center;
-    gap: 15px; /* רווח בין כפתורי התחבר/הירשם או בין האווטאר */
-    position: relative;
-  }
-  
-  .login-button, .register-button {
-    background-color: #ff4081; /* Accent Material Pink */
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  
-    &:hover {
-      background-color: #e0005a;
-    }
-  }
-  
-  /* קונטיינר מרכזי: כותרת בלבד */
-  .header-center-title {
-    flex-grow: 1; /* יאפשר לכותרת לתפוס כמה שיותר מקום פנוי במרכז */
-    text-align: center; /* מרכז את הטקסט בתוך ה-div */
-  }
-  
+}
+
+.header-center-title {
+  display: flex;
+  align-items: center;
+
   .site-name {
     font-size: 1.5em;
     font-weight: bold;
+    color: var(--color-white);
   }
-  
-  /* קונטיינר צד שמאל (לוגו) */
-  .header-left { /* כעת זה הצד השמאלי (לוגו) */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--color-black);
+  border: 2px solid var(--color-white);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
+
+  .user-avatar {
+    width: 100%;
+    height: 100%;
     display: flex;
-    align-items: center;
-    height: 100%; /* Ensure it takes full height of the header for percentage-based image height */
-    /* אין gap כאן כי אין טקסט ליד הלוגו */
-  }
-  
-  .header-image {
-    max-height: 90%; /* 90% of parent's (.header-left) height */
-    width: auto;    /* Maintain aspect ratio */
-    object-fit: contain; /* Ensures the image fits well and maintains aspect ratio */
-    /* If the image itself should not have rounded corners (e.g., if it's a rectangular logo), ensure no border-radius is applied or set border-radius: 0; */
-  }
-  /* src/app/shared/header/header.component.scss */
-.spacer {
-    flex: 1 1 auto;
-  }
-  
-  .active {
-    // עיצוב קישורים פעילים
-    font-weight: bold;
-    border-bottom: 2px solid white;
-  }
-  
-  .user-avatar-button {
-    width: 40px; // קבע רוחב וגובה לאייקון
-    height: 40px;
-    border-radius: 50%; // הפוך לעיגול
-    background-color: #8c73d9; // צבע רקע לאייקון, שנה לפי העדפה
-    color: white; // צבע טקסט
-    display: flex;
+    border-radius: 50%;
     justify-content: center;
     align-items: center;
+    font-size: 1.4em;
     font-weight: bold;
-    font-size: 1.2em; // גודל אות
-    margin-left: 15px; // רווח משמאל (מימין ל-LTR)
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // הוסף צל עדין
-  
-    .user-avatar {
-      line-height: 1; // וודא שהאות ממוקמת אנכית במרכז
-    }
+    text-transform: uppercase;
+    background-color: var(--color-black);
+    color: var(--color-white);
   }
+}
+
+.login-button {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+  }
+}
+
+.register-button {
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}

@@ -1,4 +1,5 @@
 /* src/app/home/home.component.scss */
+@use "sass:color";
 
 .home-container {
   display: flex;
@@ -8,6 +9,7 @@
 
 .image-side {
   width: 66%;
+  order: 1;
 }
 
 .image-side img {
@@ -17,8 +19,8 @@
 }
 
 .text-side {
-  background-color: var(--primary-blue);
-  color: var(--text-color-light);
+  background-color: var(--background-dark); // שחור
+  color: var(--text-on-dark); // לבן
   width: 34%;
   display: flex;
   flex-direction: column;
@@ -26,11 +28,12 @@
   align-items: center;
   padding: 20px;
   text-align: center;
-  position: relative; // הופך את ה-text-side להורה ממוקם עבור אלמנטים אבסולוטיים
+  position: relative;
+  order: 0;
 }
 
 .welcome-text {
-  font-size: 2em;
+  font-size: 3em;
   margin-bottom: 20px;
 }
 
@@ -38,13 +41,41 @@
   width: 5cm;
   height: 3cm;
   margin-top: 20px;
-  // אם משתמשים ב-ngSrc, אולי תרצו להוסיף כאן סגנונות נוספים
 }
 
-/* עיצוב לכפתור Material שממוקם אבסולוטית בתוך ה-text-side */
 .home-login-button {
   position: absolute;
   top: 20px;
-  right: 20px; // שונה מ-left ל-right עבור עקביות ב-RTL
-  z-index: 10; // ודא שהוא מעל אלמנטים אחרים ב-text-side
+  right: 20px;
+  z-index: 10;
+  
+  // *** דריסות ספציפיות לכפתור זה בלבד ***
+  background-color: var(--color-blue) !important; // כחול (התחלתי)
+  border: 2px solid var(--color-white) !important; // מסגרת לבנה
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8) !important; // הילה לבנה בולטת יותר
+  
+  // וודא שצבע הטקסט לבן
+  color: var(--text-on-dark) !important;
+  .mdc-button__label {
+      color: var(--text-on-dark) !important;
+  }
+  --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
+  --mat-mdc-button-icon-color: var(--text-on-dark) !important;
+
+  &:hover {
+      background-color: var(--color-black) !important; // שחור בלחיצה (hover)
+      box-shadow: 0 0 25px rgba(255, 255, 255, 1) !important; // הילה חזקה עוד יותר ב-hover
+  }
+
+  &[disabled] {
+      background-color: var(--color-blue) !important; // נשאר כחול גם ב-disabled
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none !important;
+      color: var(--text-on-dark) !important;
+      .mdc-button__label {
+          color: var(--text-on-dark) !important;
+      }
+      --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
+  }
 }

@@ -1,79 +1,95 @@
-<app-header [title]="'רשימת שיעורים'"></app-header>
-
-<div class="course-details-container">
+<app-header [title]="'פרטי קורס'"></app-header>
+<div class="course-details-wrapper">
   @if (errorMessage()) {
-    <div class="error-message mat-error">{{ errorMessage() }}</div>
-  }
-  @if (successMessage()) {
-    <div class="success-message mat-success">{{ successMessage() }}</div>
-  }
-
-  @if (isLoading()) {
-    <div class="loading-message">
-      <mat-spinner diameter="30"></mat-spinner>
-      <p>טוען פרטי קורס...</p>
-    </div>
-  } @else if (!course()) { 
+  <div class="message-box error-message">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ errorMessage() }}</span>
+  </div>
+  } @if (successMessage()) {
+  <div class="message-box success-message">
+    <mat-icon>check_circle_outline</mat-icon>
+    <span>{{ successMessage() }}</span>
+  </div>
+  } @if (isLoading()) {
+  <div class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>טוען פרטי קורס...</p>
+  </div>
+  } @else if (!course()) {
+  <div class="info-message">
+    <mat-icon>info_outline</mat-icon>
     <p>הקורס לא נמצא או שגיאה בטעינה.</p>
-  } @else { 
-    <mat-card class="course-card">
-      <mat-card-header>
-        <mat-card-title>{{ course()!.title }}</mat-card-title>
-      </mat-card-header>
+  </div>
+  } @else {
+  <mat-card class="course-main-card">
+    <mat-card-header>
+      <mat-card-title>{{ course()!.title }}</mat-card-title>
+    </mat-card-header>
 
-      <mat-card-content>
-        <p class="description">{{ course()!.description }}</p>
+    <mat-card-content>
+      <h3>תיאור הקורס:</h3>
+      <p class="description">{{ course()!.description }}</p>
 
-        <h3>שיעורים:</h3>
-        @if (lessons() && lessons()!.length > 0) {
-          <mat-list>
-            @for (lesson of lessons()!; track lesson.id) {
-              <mat-list-item>
-                <div matListItemTitle>{{ lesson.title }}</div>
-                <div matListItemLine>{{ lesson.content }}</div>
-                @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
-                  <div matListItemMeta>
-                    <button mat-icon-button (click)="openLessonForm(lesson)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="deleteLesson(lesson.id)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </div>
-                }
-              </mat-list-item>
-              <mat-divider></mat-divider>
-            }
-          </mat-list>
-        } @else {
-          <p>אין שיעורים זמינים כרגע.</p>
+      <h3>שיעורים:</h3>
+      @if (lessons() && lessons()!.length > 0) {
+      <mat-list class="lessons-list">
+        @for (lesson of lessons()!; track lesson.id) {
+        <mat-list-item class="lesson-list-item">
+          <div class="lesson-content">
+            <div class="lesson-title">{{ lesson.title }}</div>
+            <div class="lesson-description">{{ lesson.content }}</div>
+          </div>
+          @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
+          <div matListItemMeta class="lesson-actions">
+            <button mat-icon-button color="primary" (click)="openLessonForm(lesson)" matTooltip="ערוך שיעור">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteLesson(lesson.id)" matTooltip="מחק שיעור">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          }
+        </mat-list-item>
+        <mat-divider></mat-divider>
         }
-
+      </mat-list>
+      } @else {
+      <div class="info-message">
+        <p>אין שיעורים זמינים בקורס זה כרגע.</p>
         @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
-          <button mat-raised-button color="primary" class="add-lesson-button" (click)="openLessonForm()">
-            <mat-icon>add</mat-icon> הוסף שיעור חדש
-          </button>
+        <button mat-raised-button color="primary" class="add-lesson-button" (click)="openLessonForm()">
+          <mat-icon>add</mat-icon> הוסף שיעור ראשון
+        </button>
         }
-      </mat-card-content> 
-      <mat-card-actions alig="end">
-        @if (authService.currentUserRole() === 'student' && authService.currentUserId() !== null) {
-          <button mat-raised-button [color]="isEnrolled() ? 'warn' : 'accent'" (click)="toggleEnrollment()">
-            {{ isEnrolled() ? 'יציאה מהקורס' : 'הרשמה לקורס' }}
-          </button>
-        }
-        <button mat-button (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
-      </mat-card-actions>
-    </mat-card> 
+      </div>
+      } @if (authService.currentUserRole() === 'teacher' && lessons() && lessons()!.length > 0 && course()!.teacherId ===
+      authService.currentUserId()) {
+      <button mat-raised-button color="primary" class="add-lesson-button" (click)="openLessonForm()">
+        <mat-icon>add</mat-icon> הוסף שיעור חדש
+      </button>
+      }
+    </mat-card-content>
+
+    <mat-card-actions class="course-actions">
+      @if (authService.currentUserRole() === 'student' && authService.currentUserId() !== null) {
+      <button mat-raised-button [color]="isEnrolled() ? 'warn' : 'accent'" (click)="toggleEnrollment()">
+        {{ isEnrolled() ? 'יציאה מהקורס' : 'הרשמה לקורס' }}
+      </button>
+      }
+      <button mat-button (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
+    </mat-card-actions>
+  </mat-card>
   }
-</div> 
+</div>
 
 @if (showLessonForm()) {
-  <div class="lesson-form-overlay">
-    <app-lesson-form
-      [courseId]="course()!.id"
-      [lesson]="selectedLesson()"
-      (lessonSaved)="onLessonSaved()"
-      (cancel)="closeLessonForm()">
-    </app-lesson-form>
-  </div>
+<div class="lesson-form-overlay">
+  <app-lesson-form
+    [courseId]="course()!.id"
+    [lesson]="selectedLesson()"
+    (lessonSaved)="onLessonSaved()"
+    (cancel)="closeLessonForm()"
+  >
+  </app-lesson-form>
+</div>
 }

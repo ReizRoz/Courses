@@ -1,41 +1,231 @@
 @use '@angular/material' as mat;
+@use "sass:color";
+
+// הגדרת צבעי בסיס כמשתני Sass (CSS Custom Properties)
+// אלה ישמשו אותנו לדריסות ספציפיות ולרכיבים שאינם Material.
 :root {
-    --primary-blue: #007bff;
-    --primary-blue-dark: #0056b3; // לדוגמה, עבור מצב hover
-    --secondary-gold: #ffc107;
-    --secondary-gold-dark: #e0ac00; // לדוגמה, עבור מצב hover
-    --text-color-light: #ffffff;
-    --text-color-dark: #333333;
-    --border-color: #ced4da;
-    --background-light: #ffffff; // לדוגמה, לרקע קונטיינרים
-    --background-dark: #f8f9fa; /* לדוגמה, רקע כללי של האפליקציה או למצב hover */
+    --color-black: #000000;
+    --color-black-light: #{color.adjust(#000000, $lightness: 20%)}; // אפור כהה מאוד
+    --color-blue: #0045B8;
+    --color-blue-dark: #{color.adjust(#0045B8, $lightness: -15%)}; // כחול כהה יותר
+    --color-white: #ffffff;
+
     --error-color: #dc3545;
-    --error-background: #f8d7da;
-    --success-color: #28a745;
-    --success-background: #d4edda;
-  }
-  
- 
-  
-  $my-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-  $my-accent: mat.m2-define-palette(mat.$m2-pink-palette);
-  $my-warn: mat.m2-define-palette(mat.$m2-red-palette);
-  
-  $my-theme: mat.m2-define-light-theme((
+    --success-color: #28aa28;
+
+    // צבעים לגרדיאנט ירוק-תכלת
+    --gradient-start-color: #00FFC0;
+    --gradient-end-color: #00BFFF;
+
+    // צבעי טקסט כלליים
+    --text-on-dark: var(--color-white); // לבן על רקעים כהים
+    --text-on-light: var(--color-black); // שחור על רקעים בהירים (למשל בכרטיסים)
+    --text-secondary: var(--color-white); // טקסט משני כללי
+
+    // צבעי רקע כלליים
+    --background-dark: var(--color-black); // שחור ל-body ולצד הטקסט ב-home
+    --background-light: var(--color-white); // לבן לכרטיסים, מודאלים
+    --field-background-light-grey: #f0f0f0; // אפור בהיר לשדות טופס
+
+    // צבעי הודעות (שגיאה/הצלחה)
+    --error-background: #{color.adjust(#dc3545, $lightness: 35%, $alpha: -0.6)};
+    --success-background: #{color.adjust(#28aa28, $lightness: 35%, $alpha: -0.6)};
+
+    // צבעי גבולות וקווי הפרדה
+    --border-color-default: var(--color-white); // לבן
+    --divider-color: var(--color-white); // לבן
+}
+
+// הגדרת פלטות צבעים של Angular Material מחדש
+// primary: תהיה כחולה, כיוון שרוב הכפתורים יהיו כחולים
+$my-primary: mat.m2-define-palette(mat.$m2-blue-palette, 600, 400, 800); // 600 הוא גוון כחול יפה
+// accent: נגדיר אותה לצבע משני כלשהו, היא פחות קריטית כעת.
+$my-accent: mat.m2-define-palette(mat.$m2-green-palette, A400, A200, A700);
+$my-warn: mat.m2-define-palette(mat.$m2-red-palette, 700, 500, 900);
+
+$my-theme: mat.m2-define-light-theme((
     color: (
-      primary: $my-primary,
-      accent: $my-accent,
-      warn: $my-warn,
-    )
-  ));
-  
-  @include mat.core();
-  @include mat.all-component-themes($my-theme);
-  
-  /* סגנונות גלובליים */
-  body {
-    font-family: Arial, sans-serif;
+        primary: $my-primary,
+        accent: $my-accent,
+        warn: $my-warn,
+    ),
+    typography: mat.m2-define-typography-config(), // וודא שיש הגדרות טיפוגרפיה
+    density: 0,
+));
+
+@include mat.core();
+@include mat.all-component-themes($my-theme); // החזרנו את זה!
+
+// 3. סגנונות גלובליים ל-HTML/BODY
+body {
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-dark);
-  }
+    background-color: var(--background-dark); // רקע שחור
+    color: var(--text-on-dark); // טקסט לבן
+    direction: rtl;
+}
+
+// 4. סגנונות גלובליים עבור אלמנטים חוזרים
+
+// --- שדות טופס Material (mat-form-field) ---
+mat-form-field {
+    width: 100%;
+    text-align: right;
+
+    .mat-mdc-text-field-wrapper {
+        background-color: var(--field-background-light-grey); // רקע אפור בהיר
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        padding: 0 10px;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+        min-height: 22px;
+    }
+
+    mat-error {
+        color: var(--error-color);
+        font-size: 0.85em;
+        padding-top: 2px;
+        text-align: right;
+    }
+}
+
+// --- כפתורים כלליים של Material ---
+// הכפתורים יקבלו כעת את צבע ה-primary (כחול) כברירת מחדל.
+// נדרוס את מה שצריך ב-component SCSS.
+
+// סגנון ספציפי לכפתורי ה-AVATAR (שחורים)
+button[mat-button].app-avatar-button,
+button.mat-mdc-button.app-avatar-button,
+button[mat-raised-button].app-avatar-button,
+button.mat-mdc-raised-button.app-avatar-button {
+    background-color: var(--color-black) !important; // רקע שחור
+    border: 2px solid var(--color-white) !important; // מסגרת לבנה
+    box-shadow: 0 0 25px rgba(255, 255, 255, 1) !important; // הילה לבנה חזקה וגדולה
+    color: var(--text-on-dark) !important; // טקסט לבן
+    
+    .mdc-button__label {
+        color: var(--text-on-dark) !important;
+    }
+    --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
+    --mat-mdc-button-icon-color: var(--text-on-dark) !important;
+
+    &:hover {
+        background-color: var(--color-black-light) !important; // גוון בהיר יותר של שחור (אפור כהה מאוד)
+        box-shadow: 0 0 35px rgba(255, 255, 255, 0.9) !important; // הילה חזקה יותר
+    }
+
+    &[disabled] {
+        background-color: var(--color-black) !important;
+        color: var(--text-on-dark) !important;
+        .mdc-button__label {
+            color: var(--text-on-dark) !important;
+        }
+        --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
+    }
+}
+
+// --- הודעות כלליות (שגיאה, הצלחה) ---
+.message-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 25px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 600px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    text-align: center;
+
+    mat-icon {
+        font-size: 28px;
+        height: 28px;
+        width: 28px;
+        color: inherit;
+    }
+    span {
+        line-height: 1.5;
+    }
+}
+
+.error-message {
+    background-color: var(--error-background);
+    color: var(--error-color);
+    mat-icon { color: var(--error-color); }
+}
+
+.success-message {
+    background-color: var(--success-background);
+    color: var(--success-color);
+    mat-icon { color: var(--success-color); }
+}
+
+// --- כרטיסים (mat-card) ---
+mat-card {
+    border-radius: 12px;
+    background-color: var(--background-light); // רקע הכרטיס לבן
+    color: var(--text-on-light); // טקסט בכרטיס כהה (שחור)
+    position: relative;
+    padding: 24px;
+    z-index: 0;
+
+    border: 2px solid var(--color-blue); // מסגרת כחולה
+    box-shadow: 0 0 20px var(--color-blue); // הילה כחולה קבועה - הגדלנו את הגודל
+
+    mat-card-header {
+        text-align: right;
+
+        .mat-mdc-card-title {
+            color: var(--color-blue); // כותרת כחולה
+            font-weight: 700;
+        }
+        .mat-mdc-card-subtitle {
+            color: var(--text-color-dark); // טקסט משני כהה על רקע בהיר
+        }
+    }
+
+    transition: box-shadow 0.3s ease-in-out;
+    &:hover {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); // צל כהה יותר, בולט יותר
+    }
+}
+
+// --- סגנון עבור המספרים עם גרדיאנט בטקסט ---
+.gradient-number {
+    font-size: 3.5em;
+    font-weight: bold;
+    background: linear-gradient(to right, var(--gradient-start-color), var(--gradient-end-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+// --- מצב טעינה גלובלי ---
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--color-black); // צבע הטעינה שחור
+    font-size: 1.2em;
+    gap: 15px;
+    width: 100%;
+}
+
+// --- קו מפריד (mat-divider) ---
+mat-divider {
+    border-top-color: var(--divider-color); // לבן
+}
+
+// --- HEADER (נניח mat-toolbar או עם קלאס app-header) ---
+// אם ה-header הוא mat-toolbar, זה יחיל עליו את הצבע
+mat-toolbar, .app-header {
+    background-color: var(--color-blue) !important; // רקע כחול
+    color: var(--text-on-dark) !important; // טקסט לבן
+}

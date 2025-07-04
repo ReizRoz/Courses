@@ -1,37 +1,68 @@
+/* login.component.scss */
 
-/* src/app/auth/login/login.component.scss */
+// וודא שמשתני ה-CSS שלך (כמו --background-dark, --background-light, --error-color,
+// --secondary-color, --secondary-color-dark) מוגדרים בקובץ styles.scss הגלובלי שלך
+// וש-styles.scss מיובא כראוי ב-angular.json.
 
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: var(--background-dark);
-  direction: rtl;
+  background-color: var(--background-dark); // רקע כהה (שחור/אפור כהה)
+  direction: rtl; // כיווניות ימין לשמאל
   padding: 20px;
 }
 
 .login-card {
-  max-width: 400px; /* הגבלת רוחב הכרטיס */
-  width: 100%;      /* מאפשר לו להתפרס בתוך הגבולות של max-width */
+  max-width: 400px;
+  width: 100%;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* הוספת צל כדי שיראו את הכרטיס */
-  background-color: var(--text-color-light);
-}
-mat-form-field {
-  width: 100%; /* ודא ששדות הקלט תופסים את כל הרוחב בתוך הכרטיס */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-light); // רקע בהיר (לבן)
+  
+  // ה-mat-card מקבל כבר מסגרת כחולה והילה מהסגנונות הגלובליים (styles.scss)
+  // ולכן אין צורך להוסיף כאן סגנונות כפולים למסגרת/הילה.
 }
 
-/* אם אתה רוצה רווח בין שדות הקלט */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* הוספת מרווח אנכי בין האלמנטים בטופס */
+  gap: 15px; // רווח בין האלמנטים בטופס
 }
-/* ... שאר הסגנונות שלך ... */
+
 mat-form-field {
   width: 100%;
-  direction: rtl;
-  text-align: right; // חשוב להוסיף את זה עבור טקסט בשפות RTL
+  direction: rtl; // לוודא כיווניות ימין לשמאל בתוך השדה
+  text-align: right; // לוודא יישור טקסט לימין
 }
+
+.overall-error {
+  color: var(--error-color); // צבע שגיאה מהמשתנים הגלובליים
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* **סגנונות הקישור "למשתמש חדש"** */
+.switch-form-link {
+  color: var(--secondary-color); // צבע כחול מהמשתנים הגלובליים
+  text-decoration: none; // הסרת קו תחתון
+  font-weight: 500; // עובי גופן בינוני
+  text-align: center; // יישור טקסט הקישור למרכז (בתוך הקישור עצמו)
+  display: block; // הופך את הקישור לאלמנט בלוק כדי שנוכל למרכז אותו עם margin: auto
+  margin: 10px auto 0 auto; // ממורכז אופקית + רווח עליון
+  transition: color 0.3s ease-in-out; // מעבר חלק לצבע
+
+  &:hover {
+    color: var(--secondary-color-dark); // גוון כהה יותר של כחול במעבר עכבר
+    text-decoration: underline; // הוספת קו תחתון במעבר עכבר (אופציונלי)
+  }
+}
+
+/* **סגנונות עבור כפתור הכניסה (כפתור Material רגיל)** */
+// הכפתור הזה יקבל את הסגנונות הכלליים של mat-raised-button עם color="primary"
+// שהגדרת בקובץ styles.scss הגלובלי.
+// אין צורך להוסיף כאן סגנונות ספציפיים אם אתה רוצה שהוא יתנהג כמו שאר כפתורי ה-primary שלך.

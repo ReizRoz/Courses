@@ -8,16 +8,16 @@
   padding: 20px;
 }
 
-.login-card {
+.login-card { /* שם הקלאס הוא login-card גם ב-register.html, נשאר עקבי */
   max-width: 400px;
   width: 100%;
   padding: 20px;
   border-radius: 8px;
-  background-color: var(--text-color-light);
+  background-color: var(--background-light); // השתמש במשתנה
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.login-form {
+.register-form { /* שם הקלאס הוא register-form ב-register.html */
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -30,7 +30,7 @@ mat-form-field {
 }
 
 .overall-error {
-  color: red;
+  color: var(--error-color); // השתמש במשתנה
   margin-top: 10px;
   text-align: center;
 }

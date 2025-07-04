@@ -1,29 +1,31 @@
 <header class="header">
-    <div class="header-right">
-      @if (isAuthenticated()) {
-        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-avatar-button">
-          <span class="user-avatar">{{ userNameFirstLetter() }}</span>
+  <div class="header-right">
+    @if (isAuthenticated()) {
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-avatar-button">
+        <span class="user-avatar">{{ userNameFirstLetter() }}</span>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="editProfile()">
+          <mat-icon>account_circle</mat-icon>
+          <span>עריכת פרופיל</span>
         </button>
-  
-        <mat-menu #userMenu="matMenu">
-          <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>התנתקות</span>
-          </button>
-        </mat-menu>
-    
-      } 
-      @else {
-        <a routerLink="/login" class="login-button">התחבר</a>
-        <a routerLink="/register" class="register-button">הירשם</a>
-      }
-    </div>
-    
-    <div class="header-center-title">
-      <span class="site-name">{{ title || 'e-Learning Platform' }}</span>
-    </div>
-    
-    <div class="header-left">
-      <img class="header-image" src="assets/images/image2.jpg" alt="לוגו האתר">
-    </div>
-  </header>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>התנתקות</span>
+        </button>
+      </mat-menu>
+    }
+    @else {
+      <a routerLink="/login" class="login-button">התחבר</a>
+      <a routerLink="/register" class="register-button">הירשם</a>
+    }
+  </div>
+
+  <div class="header-center-title">
+    <span class="site-name">{{ title || 'e-Learning Platform' }}</span>
+  </div>
+
+  <div class="header-left">
+    <img class="header-image" src="assets/images/image2.jpg" alt="לוגו האתר">
+  </div>
+</header>

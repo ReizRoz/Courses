@@ -1,50 +1,59 @@
+// src/app/auth/login/login.component.ts
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../service/auth.service' // ייבוא השירות 
-import { HttpClientModule } from '@angular/common/http';  
+import { AuthService } from '../../service/auth.service';
+import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
-selector: 'app-login',
-standalone: true,
-imports: [CommonModule, RouterLink, ReactiveFormsModule,HttpClientModule,MaterialModule],
-templateUrl: './login.component.html',
-styleUrl: './login.component.scss'
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, HttpClientModule, MaterialModule],
+  templateUrl: './login.component.html', // ודא שנתיב ה-HTML נכון
+  styleUrl: './login.component.scss'    // ודא שנתיב ה-SCSS נכון
 })
 export class LoginComponent {
-loginForm: FormGroup;
-errorMessage=signal<string>('')  
-isSubmitting = signal<boolean>(false);
+  loginForm: FormGroup;
+  errorMessage = signal<string>(''); // ודא שזה מוגדר כסיגנל עם ערך התחלתי ריק
+  isSubmitting = signal<boolean>(false);
 
-constructor(
-private router: Router,
-private authService: AuthService // הזרקת השירות
-) {
-this.loginForm = new FormGroup({
-email: new FormControl('', [Validators.required, Validators.email]),
-password: new FormControl('', Validators.required)
-});
-}   
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required)
+    });
+  }
 
-onSubmitLogin():void {
-if (this.loginForm.valid) {
-  this.isSubmitting.set(true);
-this.authService.login(this.loginForm.value).subscribe({//תאזין למה שחוזר מהסרביס ששלחתי לו את הפרטים של הטופס?
-next: (response) => {//מה זה נNEXT המהרה על משתנה או מילה שמורה
-  this.isSubmitting.set(false);
-console.log('התחברות הצליחה:', response);
-this.router.navigate(['/courses']);
-},
-error: (error) => {
-  this.isSubmitting.set(false);
-console.error('שגיאה בהתחברות:', error);
-this.errorMessage.set('שם המשתמש או הסיסמה שגויים.') // הצג הודעת שגיאה
-}
-});
-} else {
-this.errorMessage.set('אנא מלא את כל השדות כנדרש.');
-}
-}
+  onSubmitLogin(): void {
+    // *** חשוב לאפס את הודעת השגיאה לפני כל ניסיון שליחה חדש ***
+    this.errorMessage.set('');
+    this.isSubmitting.set(true); // סמן כטוען בתחילת התהליך
+
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          this.isSubmitting.set(false);
+          console.log('התחברות הצליחה:', response);
+          this.router.navigate(['/courses']);
+        },
+        error: (err: Error) => { // ודא שאתה מקבל err: Error כאן
+          this.isSubmitting.set(false); // הפסק לטעון גם בשגיאה
+          console.error('שגיאה בהתחברות בקומפוננטה:', err.message); // זה מודפס אצלך לקונסולה, מעולה!
+          // *** ודא ששורה זו קיימת ומציבה את ההודעה לסיגנל ***
+          this.errorMessage.set(err.message); 
+          console.log('Current error message signal:', this.errorMessage()); // הוסף כדי לוודא שהסיגנל מתעדכן
+        }
+      });
+    } else {
+      this.isSubmitting.set(false); // אם הטופס לא ולידי, הפסק לטעון
+      this.errorMessage.set('אנא מלא את כל השדות כנדרש.');
+      this.loginForm.markAllAsTouched(); // סמן שדות כ-touched להצגת שגיאות ולידציה מקומית
+      console.log('Current error message signal (form invalid):', this.errorMessage());
+    }
+  }
 }

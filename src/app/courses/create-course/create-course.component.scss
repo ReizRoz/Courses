@@ -1,83 +1,100 @@
-/* src/app/courses/create-course/create-course.component.scss */
-.create-course-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: var(--text-color-light);
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  direction: rtl; // יישור לימין
+@use "sass:color";
 
-  h2 {
-      color: var(--primary-blue);
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2em;
-      font-weight: bold;
-  }
+.course-form-wrapper {
+    padding: 30px 20px;
+    background-color: var(--background-dark);
+    min-height: calc(100vh - 60px);
+    direction: rtl;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
 
-  .full-width {
-      width: 100%;
-      margin-bottom: 20px;
-  }
+.form-card {
+    background-color: var(--background-light);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
+    margin: 20px 0;
 
-  // כשמשתמשים ב-mat-form-field וב-matInput, חלק מהעיצובים האלה כבר לא נחוצים,
-  // או ניתנים לדריסה דרך ה-mixins של Material.
-  // אם אתה רוצה לדרוס את ברירות המחדל של Material, עשה זאת כאן.
-  // לדוגמה:
-  // .mat-mdc-form-field { // Material 3 class
-  //   .mat-mdc-text-field-wrapper {
-  //     background-color: #f0f0f0;
-  //   }
-  // }
+    mat-card-header {
+        margin-bottom: 30px;
+        text-align: center;
 
-  .submit-button {
-      display: block;
-      width: 100%;
-      padding: 12px; // ניתן להסיר אם mat-button מספק מספיק
-      // background-color, color, border, border-radius יטופלו על ידי mat-raised-button
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease; // Material כבר מטפל בזה
+        .mat-mdc-card-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--primary-color); // השתמש במשתנה
+        }
+    }
+}
 
-      // &:hover {
-      //   background-color: var(--primary-blue-dark); // לדוגמה, אם תרצה הובר מותאם אישית
-      // }
-  }
+.course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 
-  .back-button {
-      display: block;
-      width: 100%;
-      padding: 10px; // ניתן להסיר
-      margin-top: 20px;
-      // background-color, color, border, border-radius יטופלו על ידי mat-stroked-button
-      font-size: 1em;
-      cursor: pointer;
-      transition: background-color 0.3s ease; // Material כבר מטפל בזה
-      text-align: center;
-      text-decoration: none;
+// שדות הטופס - יורשים מהגלובלי, נשאר רק הקלאס
+.form-field-full-width {
+    // השתמש בסגנונות הגלובליים
+}
 
-      // &:hover {
-      //   background-color: var(--secondary-gold-dark); // לדוגמה, אם תרצה הובר מותאם אישית
-      // }
-  }
 
-  .error-message {
-      background-color: var(--error-background);
-      color: var(--error-color);
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      text-align: center;
-  }
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 
-  .success-message {
-      background-color: var(--success-background);
-      color: var(--success-color);
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      text-align: center;
-  }
+    .submit-btn {
+        // השתמש בסגנונות הגלובליים
+    }
+
+    .cancel-btn {
+        // השתמש בסגנונות הגלובליים
+    }
+}
+
+// הודעות שגיאה/הצלחה - יורשים מהגלובלי
+.message-box {
+    margin-bottom: 25px;
+    margin-top: -15px;
+}
+
+// מדיה קוורייס לרספונסיביות (הושארו כפי שהם)
+@media (max-width: 768px) {
+    .form-card {
+        padding: 20px;
+    }
+    mat-card-header .mat-mdc-card-title {
+        font-size: 2em;
+    }
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+        
+        .submit-btn, .cancel-btn {
+            width: 100%;
+        }
+    }
+    .message-box {
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .course-form-wrapper {
+        padding: 15px;
+    }
+    .form-card {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    mat-card-header .mat-mdc-card-title {
+        font-size: 1.8em;
+    }
 }

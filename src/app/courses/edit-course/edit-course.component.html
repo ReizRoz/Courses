@@ -1,27 +1,60 @@
 <app-header></app-header>
-<div class="edit-course-container">
-  <h2>ערוך קורס</h2>
+<div class="course-form-wrapper"> <mat-card class="form-card"> <mat-card-header>
+      <mat-card-title>ערוך קורס</mat-card-title>
+    </mat-card-header>
 
-  @if (errorMessage()) {
-    <div class="error-message">{{ errorMessage() }}</div>
-  }
-  @if (successMessage()) {
-    <div class="success-message">{{ successMessage() }}</div>
-  }
+    <mat-card-content>
+      @if (errorMessage()) {
+        <div class="message-box error-message">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+      @if (successMessage()) {
+        <div class="message-box success-message">
+          <mat-icon>check_circle_outline</mat-icon>
+          <span>{{ successMessage() }}</span>
+        </div>
+      }
 
-  <form (ngSubmit)="updateCourse()">
-    <div class="form-group">
-      <label for="title">שם הקורס:</label>
-      <input type="text" id="title" [(ngModel)]="courseTitle" name="title" required>
-    </div>
+      @if (isLoading()) {
+        <div class="loading-state">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>טוען נתוני קורס...</p>
+        </div>
+      } @else {
+        <form [formGroup]="editCourseForm" (ngSubmit)="updateCourse()" class="course-form">
+          <mat-form-field class="form-field-full-width">
+            <mat-label>שם הקורס</mat-label>
+            <input matInput type="text" formControlName="title" required>
+            @if (editCourseForm.get('title')?.hasError('required') && editCourseForm.get('title')?.touched) {
+              <mat-error>שם הקורס הוא שדה חובה.</mat-error>
+            }
+          </mat-form-field>
 
-    <div class="form-group">
-      <label for="description">תיאור הקורס:</label>
-      <textarea id="description" [(ngModel)]="courseDescription" name="description" rows="5" required></textarea>
-    </div>
+          <mat-form-field class="form-field-full-width">
+            <mat-label>תיאור הקורס</mat-label>
+            <textarea matInput formControlName="description" rows="5" required></textarea>
+            @if (editCourseForm.get('description')?.hasError('required') && editCourseForm.get('description')?.touched) {
+              <mat-error>תיאור הקורס הוא שדה חובה.</mat-error>
+            }
+          </mat-form-field>
 
-    <button type="submit" class="submit-button">שמור שינויים</button>
-  </form>
-
-  <button class="back-button" (click)="router.navigate(['/course', courseId()])">חזור לפרטי הקורס</button>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading() || editCourseForm.invalid" class="submit-btn">
+              @if (isLoading()) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>טוען...</span>
+              } @else {
+                <span>שמור שינויים</span>
+              }
+            </button>
+            <button mat-button color="basic" (click)="router.navigate(['/course', courseId()])" class="cancel-btn" type="button">
+              ביטול
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -2,36 +2,55 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // **ייבוא ReactiveFormsModule ו-FormBuilder**
 import { CourseService } from '../../service/course.service';
 import { Course } from '../../models/course.modul';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../service/auth.service';
+import { MaterialModule } from '../../shared/material/material.module'; // **ייבוא MaterialModule**
 
 @Component({
   selector: 'app-edit-course',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, // **החלפנו FormsModule ב-ReactiveFormsModule**
+    HeaderComponent,
+    MaterialModule // **ודא ש-MaterialModule מיובא**
+  ],
   templateUrl: './edit-course.component.html',
   styleUrls: ['./edit-course.component.scss']
 })
 export class EditCourseComponent implements OnInit {
   courseId = signal<number | null>(null);
-  courseTitle = signal<string>('');
-  courseDescription = signal<string>('');
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
-  isLoading = signal<boolean>(false); // **חשוב: הוספנו את ה-Signal הזה**
+  isLoading = signal<boolean>(false);
+
+  // **הגדרת FormGroup עבור הטופס**
+  editCourseForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     public router: Router,
     private courseService: CourseService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private fb: FormBuilder // **הזרקת FormBuilder**
+  ) {
+    // **אתחול ה-FormGroup בבנאי**
+    this.editCourseForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
       if (id) {
@@ -44,18 +63,21 @@ export class EditCourseComponent implements OnInit {
   }
 
   private loadCourse(id: number): void {
-    this.isLoading.set(true); // התחל טעינה
+    this.isLoading.set(true);
     this.courseService.getCourseById(id).subscribe({
       next: (course: Course) => {
-        this.courseTitle.set(course.title);
-        this.courseDescription.set(course.description);
+        // **עדכון ערכי הטופס באמצעות patchValue**
+        this.editCourseForm.patchValue({
+          title: course.title,
+          description: course.description
+        });
         this.errorMessage.set(null);
-        this.isLoading.set(false); // סיים טעינה
+        this.isLoading.set(false);
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error loading course for edit:', error);
-        this.errorMessage.set('שגיאה בטעינת פרטי הקורס לעריכה.');
-        this.isLoading.set(false); // סיים טעינה במקרה של שגיאה
+        this.errorMessage.set(error.error?.message || 'שגיאה בטעינת פרטי הקורס לעריכה.');
+        this.isLoading.set(false);
       }
     });
   }
@@ -67,8 +89,10 @@ export class EditCourseComponent implements OnInit {
       return;
     }
 
-    if (!this.courseTitle() || !this.courseDescription()) {
-      this.errorMessage.set('נא למלא את כל השדות.');
+    // **בדיקת ולידציה של הטופס לפני שליחה**
+    if (this.editCourseForm.invalid) {
+      this.errorMessage.set('נא למלא את כל השדות הנדרשים.');
+      this.editCourseForm.markAllAsTouched(); // סמן את כל השדות כ-touched כדי להציג שגיאות
       return;
     }
 
@@ -79,28 +103,28 @@ export class EditCourseComponent implements OnInit {
       return;
     }
 
+    // **קבלת הערכים מה-FormGroup**
     const updatedCourse: Partial<Course> = {
-      title: this.courseTitle(),
-      description: this.courseDescription(),
+      title: this.editCourseForm.value.title,
+      description: this.editCourseForm.value.description,
       teacherId: currentTeacherId
     };
 
-    this.isLoading.set(true); // **התחל טעינה לפני קריאת ה-API**
+    this.isLoading.set(true);
 
     this.courseService.updateCourse(id, updatedCourse).subscribe({
       next: (course: Course) => {
         console.log('Course updated successfully:', course);
         this.successMessage.set('הקורס עודכן בהצלחה!');
         this.errorMessage.set(null);
-        this.isLoading.set(false); // **סיים טעינה בהצלחה**
-        // נווט בחזרה לעמוד פרטי הקורס או רשימת הקורסים
-        this.router.navigate(['/courses']); // או היכן שמתאים
+        this.isLoading.set(false);
+        this.router.navigate(['/courses']);
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error updating course:', err);
-        this.errorMessage.set('שגיאה בעדכון הקורס. אנא נסה שוב.');
+        this.errorMessage.set(err.error?.message || 'שגיאה בעדכון הקורס. אנא נסה שוב.');
         this.successMessage.set(null);
-        this.isLoading.set(false); // **סיים טעינה בשגיאה**
+        this.isLoading.set(false);
       }
     });
   }

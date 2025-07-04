@@ -4,8 +4,7 @@
       <mat-card-title>הרשמה</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
-
+      <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmitForm()">
         <mat-form-field>
           <mat-label>שם</mat-label>
           <input matInput formControlName="name" placeholder="הכנס את שמך">
@@ -46,15 +45,13 @@
           </mat-error>
         </mat-form-field>
 
-        <a mat-button color="accent" [routerLink]="['/login']" class="switch-form-link">כבר יש לך חשבון?</a>
-
+        <a mat-button color="accent" [routerLink]="['/login']" class="switch-form-link" *ngIf="!isEditMode()">כבר יש לך חשבון?</a>
         <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid || isSubmitting()">
-          <ng-container *ngIf="isSubmitting(); else elseRegister">
-            <span>נרשם...</span>
+          <ng-container *ngIf="isSubmitting(); else buttonText">
+            <span>{{ isEditMode() ? 'שומר שינויים...' : 'נרשם...' }}</span>
           </ng-container>
-          <ng-template #elseRegister>
-            הרשמה
-          </ng-template>
+          <ng-template #buttonText>
+            {{ submitButtonText() }} </ng-template>
         </button>
 
         <div *ngIf="errorMessage()" class="overall-error">

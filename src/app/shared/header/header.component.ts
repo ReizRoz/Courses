@@ -45,4 +45,8 @@ export class HeaderComponent {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+  editProfile(): void {
+    // מנווט לדף ההרשמה במצב עריכה
+    this.router.navigate(['/register'], { queryParams: { mode: 'edit' } });
+  }
 }

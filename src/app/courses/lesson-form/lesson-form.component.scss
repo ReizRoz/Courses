@@ -1,51 +1,107 @@
-/* src/app/courses/lesson-form/lesson-form.component.scss */
-.lesson-form-card {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    background-color: var(--background-light); // רקע בהיר לטופס
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); // צל כבד יותר לדיאלוג
-    direction: rtl; // יישור לימין
+@use "sass:color";
 
+// 1. קונטיינר עטיפה כללי לדף
+.course-form-wrapper {
+    padding: 30px 20px;
+    background-color: var(--background-dark);
+    min-height: calc(100vh - 60px);
+    direction: rtl;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+// 2. הכרטיס המכיל את הטופס
+.form-card {
+    background-color: var(--background-light);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
+    margin: 20px 0;
+
+    // **תיקון: הסתרת ה-mat-card-header לחלוטין**
     mat-card-header {
-        padding-bottom: 20px;
-        text-align: center;
-        .mat-mdc-card-title {
-            font-size: 1.8em;
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
+        display: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+    }
+}
+
+// 3. הטופס עצמו
+.course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+// 4. שדות הטופס (mat-form-field) - יורשים מהגלובלי
+.form-field-full-width {
+    // השתמש בסגנונות הגלובליים
+}
+
+// 5. קבוצת כפתורים - יורשים מהגלובלי
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .submit-btn {
+        // השתמש בסגנונות הגלובליים
     }
 
-    mat-card-content {
-        .full-width {
+    .cancel-btn {
+        // השתמש בסגנונות הגלובליים
+    }
+}
+
+// 6. הודעות שגיאה/הצלחה - יורשות מהגלובלי
+.message-box {
+    margin-bottom: 25px;
+    margin-top: -15px; // קצת למעלה כדי שלא יהיה רווח גדול מדי
+}
+
+// מצב טעינה (ספציפי לטופס שיעור, כשיש טעינת נתונים קודמים)
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--primary-color);
+    font-size: 1.1em;
+    gap: 10px;
+    width: 100%;
+}
+
+// 7. מדיה קוורייס לרספונסיביות (הושארו כפי שהם)
+@media (max-width: 768px) {
+    .form-card {
+        padding: 20px;
+    }
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+
+        .submit-btn, .cancel-btn {
             width: 100%;
-            margin-bottom: 20px;
         }
+    }
+    .message-box {
+        padding: 15px 20px;
+    }
+}
 
-        .form-actions {
-            display: flex;
-            justify-content: flex-start; // יישור הכפתורים לימין
-            gap: 10px;
-            margin-top: 20px;
-
-            button {
-                padding: 10px 15px;
-                font-size: 1em;
-                mat-icon {
-                  margin-left: 8px;
-                }
-            }
-        }
-
-        .error-message {
-            background-color: var(--error-background);
-            color: var(--error-color);
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 15px;
-            text-align: center;
-        }
+@media (max-width: 480px) {
+    .course-form-wrapper {
+        padding: 15px;
+    }
+    .form-card {
+        padding: 15px;
+        border-radius: 8px;
     }
 }

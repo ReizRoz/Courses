@@ -65,7 +65,7 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   }
 
   viewCourseDetails(courseId: number): void {
-    this.router.navigate(['/course', courseId]);
+    this.router.navigate(['/courses', courseId]);
   }
 
   editCourse(courseId: number): void {
