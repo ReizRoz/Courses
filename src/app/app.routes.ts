@@ -1,3 +1,4 @@
+// src/app/routes.ts
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -10,31 +11,31 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // *** חשוב: נתיב עם ה-ID קודם! ושינוי מ-'course' ל-'courses' לעקביות ***
-  { 
-    path: 'courses/:id', 
-    loadComponent: () => import('./courses/course-details/course-details.component').then(m => m.CourseDetailsComponent) 
-  },
-  // נתיב לרשימת הקורסים (לאחר הנתיב הספציפי)
-  { 
-    path: 'courses', 
-    loadComponent: () => import('./courses/courses-list/courses-list.component').then(m => m.CoursesListComponent) 
-  },
+  // נתיבים לרשימת קורסים ופרטי קורס
+  // חשוב: נתיב עם ה-ID קודם כדי למנוע התנגשות
 
   {
-    path: 'create-course',
-    loadComponent: () => import('./courses/create-course/create-course.component').then(m => m.CreateCourseComponent),
+    path: 'courses',
+    loadComponent: () => import('./courses/courses-list/courses-list.component').then(m => m.CoursesListComponent)
+  },
+
+  // נתיבים ליצירה ועריכה - מפנים לקומפוננטה המאוחדת CourseFormComponent
+  {
+    path: 'courses/create', // נתיב ליצירת קורס חדש
+    loadComponent: () => import('./courses/course-form/course-form.component').then(m => m.CourseFormComponent),
     canActivate: [teacherGuard] // נתיב מוגן למורים בלבד
   },
   {
-    path: 'edit-course/:id',
-    loadComponent: () => import('./courses/edit-course/edit-course.component').then(m => m.EditCourseComponent),
-    canActivate: [teacherGuard] // נתיב מוגן למורים בלבד
+    path: 'courses/edit/:id', // נתיב לעריכת קורס קיים, עם פרמטר ID
+    loadComponent: () => import('./courses/course-form/course-form.component').then(m => m.CourseFormComponent),
+    canActivate: [teacherGuard] // נתיב מוגן למורים בלב
   },
-  
+  {
+    path: 'courses/:id',
+    loadComponent: () => import('./courses/course-details/course-details.component').then(m => m.CourseDetailsComponent)
+  },
   // נתיב ה-wildcard חייב להיות האחרון
-  // מומלץ להפנות ל-/courses במקום לדף הבית במקרה של נתיב לא מוכר
-  { path: '**', redirectTo: '/courses' } 
+  { path: '**', redirectTo: '/courses' }
 ];
 
 console.log('Routes loaded', routes);

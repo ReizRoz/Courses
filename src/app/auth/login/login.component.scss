@@ -48,7 +48,7 @@ mat-form-field {
 
 /* **סגנונות הקישור "למשתמש חדש"** */
 .switch-form-link {
-  color: var(--secondary-color); // צבע כחול מהמשתנים הגלובליים
+  color: var((--color-blue)); // צבע כחול מהמשתנים הגלובליים
   text-decoration: none; // הסרת קו תחתון
   font-weight: 500; // עובי גופן בינוני
   text-align: center; // יישור טקסט הקישור למרכז (בתוך הקישור עצמו)
@@ -57,12 +57,7 @@ mat-form-field {
   transition: color 0.3s ease-in-out; // מעבר חלק לצבע
 
   &:hover {
-    color: var(--secondary-color-dark); // גוון כהה יותר של כחול במעבר עכבר
+    color: var(--secondary-color); // גוון כהה יותר של כחול במעבר עכבר
     text-decoration: underline; // הוספת קו תחתון במעבר עכבר (אופציונלי)
   }
 }
-
-/* **סגנונות עבור כפתור הכניסה (כפתור Material רגיל)** */
-// הכפתור הזה יקבל את הסגנונות הכלליים של mat-raised-button עם color="primary"
-// שהגדרת בקובץ styles.scss הגלובלי.
-// אין צורך להוסיף כאן סגנונות ספציפיים אם אתה רוצה שהוא יתנהג כמו שאר כפתורי ה-primary שלך.

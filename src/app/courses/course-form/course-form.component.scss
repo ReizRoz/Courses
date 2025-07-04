@@ -1,3 +1,4 @@
+/* src/app/courses/course-form/course-form.component.scss */
 @use "sass:color";
 
 .course-form-wrapper {
@@ -18,7 +19,8 @@
     width: 100%;
     max-width: 650px;
     margin: 20px 0;
-
+    /* הערה: סגנונות ה-border וה-box-shadow החזקים יותר
+       עדיף שיועברו ל-src/styles.scss לקבלת ספציפיות טובה יותר על mat-card. */
 }
 
 .course-form {
@@ -27,11 +29,9 @@
     gap: 25px;
 }
 
-// שדות הטופס - יורשים מהגלובלי, נשאר רק הקלאס
 .form-field-full-width {
-    // השתמש בסגנונות הגלובליים
+    // השתמש בסגנונות הגלובליים, אין צורך ספציפי כאן.
 }
-
 
 .form-actions {
     display: flex;
@@ -49,26 +49,23 @@
     }
 }
 
-// הודעות שגיאה/הצלחה - יורשים מהגלובלי
 .message-box {
     margin-bottom: 25px;
     margin-top: -15px;
 }
 
-// מצב טעינה (ספציפי לטופס עריכה)
 .loading-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 200px; // גובה קטן יותר כי הוא בתוך mat-card-content
+    min-height: 200px;
     color: var(--primary-color);
     font-size: 1.1em;
     gap: 10px;
     width: 100%;
 }
 
-// מדיה קוורייס לרספונסיביות (הושארו כפי שהם)
 @media (max-width: 768px) {
     .form-card {
         padding: 20px;
@@ -76,7 +73,7 @@
     .form-actions {
         flex-direction: column;
         align-items: stretch;
-        
+
         .submit-btn, .cancel-btn {
             width: 100%;
         }

@@ -1,7 +1,10 @@
-<app-header></app-header>
-<div class="course-form-wrapper"> <mat-card class="form-card">
-      <mat-card-title>ערוך קורס</mat-card-title>
+<app-header [title]="isEditMode() ? 'עריכת קורס' : 'יצירת קורס חדש'"></app-header>
 
+<div class="course-form-wrapper">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode() ? 'ערוך קורס' : 'צור קורס חדש' }}</mat-card-title>
+    </mat-card-header>
 
     <mat-card-content>
       @if (errorMessage()) {
@@ -17,17 +20,16 @@
         </div>
       }
 
-      @if (isLoading()) {
-        <div class="loading-state">
+      @if (isLoading() && isEditMode()) { <div class="loading-state">
           <mat-spinner diameter="50"></mat-spinner>
           <p>טוען נתוני קורס...</p>
         </div>
       } @else {
-        <form [formGroup]="editCourseForm" (ngSubmit)="updateCourse()" class="course-form">
+        <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="course-form">
           <mat-form-field class="form-field-full-width">
             <mat-label>שם הקורס</mat-label>
             <input matInput type="text" formControlName="title" required>
-            @if (editCourseForm.get('title')?.hasError('required') && editCourseForm.get('title')?.touched) {
+            @if (courseForm.get('title')?.hasError('required') && courseForm.get('title')?.touched) {
               <mat-error>שם הקורס הוא שדה חובה.</mat-error>
             }
           </mat-form-field>
@@ -35,21 +37,20 @@
           <mat-form-field class="form-field-full-width">
             <mat-label>תיאור הקורס</mat-label>
             <textarea matInput formControlName="description" rows="5" required></textarea>
-            @if (editCourseForm.get('description')?.hasError('required') && editCourseForm.get('description')?.touched) {
+            @if (courseForm.get('description')?.hasError('required') && courseForm.get('description')?.touched) {
               <mat-error>תיאור הקורס הוא שדה חובה.</mat-error>
             }
           </mat-form-field>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading() || editCourseForm.invalid" class="submit-btn">
-              @if (isLoading()) {
-                <mat-spinner diameter="20"></mat-spinner>
-                <span>טוען...</span>
+            <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting() || courseForm.invalid" class="submit-btn">
+              @if (isSubmitting()) { <mat-spinner diameter="20"></mat-spinner>
+                <span>שולח...</span>
               } @else {
-                <span>שמור שינויים</span>
+                <span>{{ isEditMode() ? 'שמור שינויים' : 'צור קורס' }}</span>
               }
             </button>
-            <button mat-button color="basic" (click)="router.navigate(['/course', courseId()])" class="cancel-btn" type="button">
+            <button mat-button color="basic" (click)="onCancel()" class="cancel-btn" type="button">
               ביטול
             </button>
           </div>

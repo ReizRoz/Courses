@@ -40,10 +40,8 @@
 }
 
 .course-card {
-    background-color: var(--background-light);
+ 
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -67,38 +65,12 @@
     .card-actions-bottom {
         padding-top: 20px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: flex-start;
         gap: 10px;
         margin-top: auto;
 
-        // *** סגנונות לכפתורי אייקון עריכה/מחיקה בתוך הכרטיס ***
-        button[mat-icon-button], a[mat-icon-button] {
-            // מאפס את ברירות המחדל של כפתור Material לאייקון
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0;
-            min-width: unset;
-            height: unset;
-            line-height: unset;
-            transition: background-color 0.2s ease; // מעבר חלק לרקע בהובר
-
-            .mat-mdc-button-persistent-ripple {
-                display: none !important; // הסתר את אפקט הריפל אם לא רוצים אותו
-            }
-
-            mat-icon {
-                font-size: 24px; // גודל אייקון
-                height: 24px;
-                width: 24px;
-                color: var(--color-blue) !important; // *** אייקון כחול ***
-            }
-            &:hover {
-                background-color: rgba(0, 69, 184, 0.1) !important; // רקע כחול שקוף עדין בהובר
-                border-radius: 50%; // רקע עגול
-            }
-        }
+      
     }
 }
 
@@ -128,24 +100,24 @@
     white-space: nowrap;
     
     // *** סגנונות ספציפיים לכפתור "צור קורס חדש" ***
-    background-color: var(--color-white) !important; // רקע לבן
-    border: 2px solid var(--color-blue) !important; // מסגרת כחולה
-    color: var(--color-blue) !important; // טקסט כחול
+    background-color: var(--color-white) ; // רקע לבן
+    border: 2px solid var(--color-blue); // מסגרת כחולה
+    color: var(--color-blue) ; // טקסט כחול
     
     .mdc-button__label {
-        color: var(--color-blue) !important;
+        color: var(--color-blue);
     }
-    --mat-mdc-button-label-text-color: var(--color-blue) !important;
-    --mat-mdc-button-icon-color: var(--color-blue) !important; // אייקון כחול
+    --mat-mdc-button-label-text-color: var(--color-blue) ;
+    --mat-mdc-button-icon-color: var(--color-blue)  // אייקון כחול
 
     &:hover {
-        background-color: rgba(0, 69, 184, 0.05) !important; // רקע כחול שקוף עדין מאוד בהובר
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25) !important; // צל חזק יותר
+        background-color: rgba(0, 69, 184, 0.05) ; // רקע כחול שקוף עדין מאוד בהובר
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); // צל חזק יותר
     }
 
     mat-icon {
-        margin-left: 8px;
-        color: var(--color-blue) !important; // וודא שהאייקון בתוך הכפתור כחול
+        margin-left: 20px;
+        color: var(--color-blue); // וודא שהאייקון בתוך הכפתור כחול
     }
 }
 
@@ -167,7 +139,7 @@
         padding: 15px;
     }
     mat-card-title {
-        font-size: 1.3em !important;
+        font-size: 1.3em;
     }
     .create-course-btn {
         font-size: 1em;

@@ -109,8 +109,8 @@ button.mat-mdc-raised-button.app-avatar-button {
     .mdc-button__label {
         color: var(--text-on-dark) !important;
     }
-    --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
-    --mat-mdc-button-icon-color: var(--text-on-dark) !important;
+    --mat-mdc-button-label-text-color: var(--text-on-dark) ;
+    --mat-mdc-button-icon-color: var(--text-on-dark);
 
     &:hover {
         background-color: var(--color-black-light) !important; // גוון בהיר יותר של שחור (אפור כהה מאוד)
@@ -118,10 +118,10 @@ button.mat-mdc-raised-button.app-avatar-button {
     }
 
     &[disabled] {
-        background-color: var(--color-black) !important;
-        color: var(--text-on-dark) !important;
+        background-color: var(--color-black);
+        color: var(--text-on-dark);
         .mdc-button__label {
-            color: var(--text-on-dark) !important;
+            color: var(--text-on-dark);
         }
         --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
     }
