@@ -176,17 +176,7 @@ mat-card {
     border: 2px solid var(--color-blue); // מסגרת כחולה
     box-shadow: 0 0 20px var(--color-blue); // הילה כחולה קבועה - הגדלנו את הגודל
 
-    mat-card-header {
-        text-align: right;
 
-        .mat-mdc-card-title {
-            color: var(--color-blue); // כותרת כחולה
-            font-weight: 700;
-        }
-        .mat-mdc-card-subtitle {
-            color: var(--text-color-dark); // טקסט משני כהה על רקע בהיר
-        }
-    }
 
     transition: box-shadow 0.3s ease-in-out;
     &:hover {
