@@ -23,7 +23,17 @@
   /* יורש מהגלובלי */
   margin: 30px auto; /* ספציפי למיקום המארג'ינים */
 }
-
+.form-card {
+    background-color: var(--background-light);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
+    margin: 20px 0;
+    /* הערה: סגנונות ה-border וה-box-shadow החזקים יותר
+       עדיף שיועברו ל-src/styles.scss לקבלת ספציפיות טובה יותר על mat-card. */
+}
 .courses-content {
   width: 100%;
   display: flex;
