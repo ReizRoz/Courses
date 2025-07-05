@@ -9,7 +9,6 @@ import { Course, Lesson } from '../models/course.modul';
   providedIn: 'root'
 })
 export class CourseService {
-  // כתובת ה-API מוגדרת כאן ישירות
   private apiUrl = 'http://localhost:3000/api'; // וודא שזו הכתובת המדויקת של ה-Backend שלך
 
   constructor(private http: HttpClient) {}
@@ -28,7 +27,6 @@ export class CourseService {
     );
   }
 
-  // הפרמטר courseData חייב לכלול את כל השדות החובה מוגדרים
   createCourse(courseData: { title: string, description: string, teacherId: number }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/courses`, courseData).pipe(
       tap(response => console.log('Course created:', response)),
@@ -59,7 +57,6 @@ export class CourseService {
   }
 
   unenrollFromCourse(courseId: number, userId: number): Observable<any> {
-    // מניח שיש לך נקודת קצה כזו ב-Backend, או שתצטרך להתאים אותה למה שקיים
     return this.http.post<any>(`${this.apiUrl}/courses/${courseId}/unenroll`, { userId }).pipe(
       tap(response => console.log('Unenrolled from course:', response)),
       catchError(this.handleError)
@@ -69,12 +66,19 @@ export class CourseService {
   // --- Lesson related methods ---
   getLessonsByCourseId(courseId: number): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${this.apiUrl}/courses/${courseId}/lessons`).pipe(
-      tap(lessons => console.log(`Workspaceed lessons for course ${courseId}:`, lessons)),
+      tap(lessons => console.log(`Fetched lessons for course ${courseId}:`, lessons)),
       catchError(this.handleError)
     );
   }
 
-  // הפרמטר lessonData חייב לכלול את כל השדות החובה מוגדרים
+  // **מתודה זו נחוצה כעת ושוחררה מהערות הקוד**
+  getLessonById(courseId: number, lessonId: number): Observable<Lesson> {
+    return this.http.get<Lesson>(`${this.apiUrl}/courses/${courseId}/lessons/${lessonId}`).pipe(
+      tap(lesson => console.log(`Fetched lesson ${lessonId} for course ${courseId}:`, lesson)),
+      catchError(this.handleError)
+    );
+  }
+
   createLesson(courseId: number, lessonData: { title: string, content: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/courses/${courseId}/lessons`, lessonData).pipe(
       tap(response => console.log('Lesson created:', response)),

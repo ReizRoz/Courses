@@ -94,7 +94,7 @@ mat-form-field {
 // נדרוס את מה שצריך ב-component SCSS.
 
 // סגנון ספציפי לכפתורי ה-AVATAR (שחורים)
-button[mat-button].app-avatar-button,
+/*button[mat-button].app-avatar-button,
 button.mat-mdc-button.app-avatar-button,
 button[mat-raised-button].app-avatar-button,
 button.mat-mdc-raised-button.app-avatar-button {
@@ -123,7 +123,7 @@ button.mat-mdc-raised-button.app-avatar-button {
         --mat-mdc-button-label-text-color: var(--text-on-dark) !important;
     }
 }
-
+*/
 // --- הודעות כלליות (שגיאה, הצלחה) ---
 .message-box {
     display: flex;

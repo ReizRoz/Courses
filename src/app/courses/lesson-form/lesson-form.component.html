@@ -1,7 +1,11 @@
-<app-header [title]="isEditMode() ? 'עריכת שיעור' : 'יצירת שיעור חדש'"></app-header>
+<app-header [title]="isEditMode() ? 'עריכת שיעור' : 'הוספת שיעור חדש'"></app-header>
 
-<div class="course-form-wrapper">
+<div class="lesson-form-wrapper">
   <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode() ? 'ערוך שיעור' : 'הוסף שיעור חדש' }}</mat-card-title>
+    </mat-card-header>
+
     <mat-card-content>
       @if (errorMessage()) {
         <div class="message-box error-message">
@@ -9,39 +13,49 @@
           <span>{{ errorMessage() }}</span>
         </div>
       }
-      @if (isLoading() && isEditMode() && !lessonForm.value.title) {
+      @if (successMessage()) {
+        <div class="message-box success-message">
+          <mat-icon>check_circle_outline</mat-icon>
+          <span>{{ successMessage() }}</span>
+        </div>
+      }
+
+      @if (isLoading() && isEditMode()) {
         <div class="loading-state">
           <mat-spinner diameter="50"></mat-spinner>
           <p>טוען נתוני שיעור...</p>
         </div>
       } @else {
-        <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()" class="course-form">
+        <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()" class="lesson-form">
           <mat-form-field class="form-field-full-width">
             <mat-label>כותרת השיעור</mat-label>
-            <input matInput type="text" formControlName="title" required>
-            @if (lessonForm.get('title')?.hasError('required') && lessonForm.get('title')?.touched) {
-              <mat-error>כותרת השיעור היא שדה חובה.</mat-error>
+            <input matInput formControlName="title" required />
+            @if (lessonForm.controls['title'].invalid && lessonForm.controls['title'].touched) {
+              <mat-error>כותרת השיעור נדרשת.</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field class="form-field-full-width">
             <mat-label>תוכן השיעור</mat-label>
             <textarea matInput formControlName="content" rows="5" required></textarea>
-            @if (lessonForm.get('content')?.hasError('required') && lessonForm.get('content')?.touched) {
-              <mat-error>תוכן השיעור הוא שדה חובה.</mat-error>
+            @if (lessonForm.controls['content'].invalid && lessonForm.controls['content'].touched) {
+              <mat-error>תוכן השיעור נדרש.</mat-error>
             }
           </mat-form-field>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading() || lessonForm.invalid" class="submit-btn">
+            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()" class="submit-btn">
               @if (isLoading()) {
                 <mat-spinner diameter="20"></mat-spinner>
-                <span>טוען...</span>
+                <span>שולח...</span>
               } @else {
-                <span>{{ isEditMode() ? 'שמור שינויים' : 'צור שיעור' }}</span>
+                <ng-container>
+                  <mat-icon>{{ isEditMode() ? 'save' : 'add' }}</mat-icon>
+                  {{ isEditMode() ? 'שמור שינויים' : 'הוסף שיעור' }}
+                </ng-container>
               }
             </button>
-            <button mat-button color="basic" (click)="onCancel()" class="cancel-btn" type="button">
+            <button mat-button color="basic" type="button" (click)="onCancel()" [disabled]="isLoading()" class="cancel-btn">
               ביטול
             </button>
           </div>

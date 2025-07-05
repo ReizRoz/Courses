@@ -23,7 +23,7 @@
   } @else {
   <mat-card class="course-main-card">
 
-      <mat-card-title>{{ course()!.title }}</mat-card-title>
+    <mat-card-title>{{ course()!.title }}</mat-card-title>
 
 
     <mat-card-content>
@@ -41,7 +41,7 @@
           </div>
           @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
           <div matListItemMeta class="lesson-actions">
-            <button mat-icon-button color="primary" (click)="openLessonForm(lesson)" matTooltip="ערוך שיעור">
+            <button mat-icon-button color="primary" [routerLink]="['/courses', course()!.id, 'edit-lesson', lesson.id]" matTooltip="ערוך שיעור">
               <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="deleteLesson(lesson.id)" matTooltip="מחק שיעור">
@@ -57,16 +57,16 @@
       <div class="info-message">
         <p>אין שיעורים זמינים בקורס זה כרגע.</p>
         @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
-        <button mat-raised-button color="primary" class="add-lesson-button" (click)="openLessonForm()">
+        <button mat-raised-button color="primary" class="add-lesson-button" [routerLink]="['/courses', course()!.id, 'add-lesson']">
           <mat-icon>add</mat-icon> הוסף שיעור ראשון
         </button>
         }
       </div>
       } @if (authService.currentUserRole() === 'teacher' && lessons() && lessons()!.length > 0 && course()!.teacherId ===
       authService.currentUserId()) {
-      <button mat-raised-button color="primary" class="add-lesson-button" (click)="openLessonForm()">
-        <mat-icon>add</mat-icon> הוסף שיעור חדש
-      </button>
+        <button mat-raised-button color="primary" [routerLink]="['/courses', course()!.id, 'add-lesson']">
+          <mat-icon>add</mat-icon> הוסף שיעור חדש
+        </button>
       }
     </mat-card-content>
 
@@ -81,15 +81,3 @@
   </mat-card>
   }
 </div>
-
-@if (showLessonForm()) {
-<div class="lesson-form-overlay">
-  <app-lesson-form
-    [courseId]="course()!.id"
-    [lesson]="selectedLesson()"
-    (lessonSaved)="onLessonSaved()"
-    (cancel)="closeLessonForm()"
-  >
-  </app-lesson-form>
-</div>
-}

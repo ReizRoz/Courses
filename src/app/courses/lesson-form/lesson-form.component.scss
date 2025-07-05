@@ -1,99 +1,146 @@
+/* src/app/courses/courses-list/courses-list.component.scss */
+
 @use "sass:color";
 
-// 1. קונטיינר עטיפה כללי לדף
-.course-form-wrapper {
-    padding: 30px 20px;
-    background-color: var(--background-dark);
-    min-height: calc(100vh - 60px);
-    direction: rtl;
+.courses-page-wrapper {
+  padding: 30px 20px;
+  background-color: var(--background-dark);
+  min-height: calc(100vh - 60px);
+  direction: rtl;
+  text-align: right;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-spinner-container {
+  /* יורש מהגלובלי */
+}
+
+.error-message {
+  /* יורש מהגלובלי */
+  margin: 30px auto; /* ספציפי למיקום המארג'ינים */
+}
+
+.courses-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.course-card {
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  mat-card-content {
+    padding-top: 10px;
+    color: var(--text-on-light); /* טקסט שחור על רקע לבן */
+    flex-grow: 1;
+    p {
+      margin-bottom: 12px;
+    }
+  }
+  .card-actions-bottom {
+    padding-top: 20px;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-// 2. הכרטיס המכיל את הטופס
-.form-card {
-    background-color: var(--background-light);
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    padding: 30px;
-    width: 100%;
-    max-width: 650px;
-    margin: 20px 0;
-}
-
-// 3. הטופס עצמו
-.course-form {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-// 4. שדות הטופס (mat-form-field) - יורשים מהגלובלי
-.form-field-full-width {
-    // השתמש בסגנונות הגלובליים
-}
-
-// 5. קבוצת כפתורים - יורשים מהגלובלי
-.form-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 30px;
+    flex-wrap: nowrap;
     justify-content: flex-start;
-    flex-wrap: wrap;
-
-    .submit-btn {
-        // השתמש בסגנונות הגלובליים
-    }
-
-    .cancel-btn {
-        // השתמש בסגנונות הגלובליים
-    }
+    gap: 1px;
+    margin-top: auto;
+  }
 }
 
-// 6. הודעות שגיאה/הצלחה - יורשות מהגלובלי
-.message-box {
-    margin-bottom: 25px;
-    margin-top: -15px; // קצת למעלה כדי שלא יהיה רווח גדול מדי
+.no-courses-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 1.4em;
+  color: var(--text-secondary); /* לבן */
+  background-color: var(--background-light); /* לבן */
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 200px;
 }
 
-// מצב טעינה (ספציפי לטופס שיעור, כשיש טעינת נתונים קודמים)
-.loading-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    color: var(--primary-color);
-    font-size: 1.1em;
-    gap: 10px;
-    width: 100%;
+.create-course-btn {
+  margin-top: 40px;
+  font-size: 1.1em;
+  padding: 12px 25px;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+
+  /* *** סגנונות ספציפיים לכפתור "צור קורס חדש" *** */
+  background-color: var(--color-white); /* רקע לבן */
+  border: 2px solid var(--color-blue); /* מסגרת כחולה */
+  color: var(--color-blue); /* טקסט כחול */
+
+  .mdc-button__label {
+    color: var(--color-blue);
+  }
+  --mat-mdc-button-label-text-color: var(--color-blue);
+  --mat-mdc-button-icon-color: var(--color-blue); /* אייקון כחול */
+
+  &:hover {
+    background-color: rgba(0, 69, 184, 0.05); /* רקע כחול שקוף עדין מאוד בהובר */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* צל חזק יותר */
+  }
+
+  mat-icon {
+    margin-left: 20px;
+    color: var(--color-blue); /* וודא שהאייקון בתוך הכפתור כחול */
+  }
 }
 
-// 7. מדיה קוורייס לרספונסיביות (הושארו כפי שהם)
-@media (max-width: 768px) {
-    .form-card {
-        padding: 20px;
-    }
-    .form-actions {
-        flex-direction: column;
-        align-items: stretch;
-
-        .submit-btn, .cancel-btn {
-            width: 100%;
-        }
-    }
-    .message-box {
-        padding: 15px 20px;
-    }
+/* Media Queries for Responsiveness */
+@media (max-width: 900px) {
+  .courses-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .courses-page-wrapper {
+    padding: 60px 15px;
+  }
 }
 
-@media (max-width: 480px) {
-    .course-form-wrapper {
-        padding: 15px;
-    }
-    .form-card {
-        padding: 15px;
-        border-radius: 8px;
-    }
+@media (max-width: 600px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  .course-card {
+    padding: 15px;
+  }
+  mat-card-title {
+    font-size: 1.3em;
+  }
+  .create-course-btn {
+    font-size: 1em;
+    padding: 10px 20px;
+  }
 }

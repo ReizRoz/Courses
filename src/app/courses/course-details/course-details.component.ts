@@ -1,13 +1,14 @@
 // src/app/courses/course-details/course-details.component.ts
 import { Component, OnInit, signal, OnDestroy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService } from '../../service/course.service';
-import { Course, Lesson } from '../../models/course.modul'; // וודא ש-Course כולל enrolledStudents
+import { Course, Lesson } from '../../models/course.modul';
 import { AuthService } from '../../service/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { LessonFormComponent } from '../lesson-form/lesson-form.component';
+// **הסר את ייבוא LessonFormComponent מכיוון שהוא לא נטען כעת כפופאפ בתוך הקומפוננטה הזו.**
+// import { LessonFormComponent } from '../lesson-form/lesson-form.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../service/user.service';
 import { MaterialModule } from '../../shared/material/material.module';
@@ -19,7 +20,9 @@ import { MaterialModule } from '../../shared/material/material.module';
     CommonModule,
     HeaderComponent,
     MaterialModule,
-    LessonFormComponent
+    // **הסר את LessonFormComponent מה-imports כאן, הוא נטען דרך ה-router.**
+    // LessonFormComponent,
+    RouterModule // נשאר כי אתה משתמש ב-routerLink ב-HTML
   ],
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.scss']
@@ -32,8 +35,9 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   isEnrolled = signal<boolean>(false);
   isLoading = signal<boolean>(true);
 
-  showLessonForm = signal<boolean>(false);
-  selectedLesson = signal<Lesson | undefined>(undefined);
+  // **משתני Signal לשליטה בפופאפ - אין בהם צורך אם עוברים לדף חדש. ניתן להסירם.**
+  // showLessonForm = signal<boolean>(false);
+  // selectedLesson = signal<Lesson | undefined>(undefined);
 
   private routeSubscription: Subscription | undefined;
 
@@ -44,19 +48,12 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     public userService: UserService,
     public router: Router
   ) {
-    // ה-effect הזה יגיב לשינויים ב-course() (כאשר הקורס נטען או מתעדכן)
-    // וגם לשינויים ב-currentUserId() (כאשר משתמש מתחבר/מתנתק).
     effect(() => {
       this.checkEnrollmentStatus();
     });
   }
 
   ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
     this.routeSubscription = this.activatedRoute.paramMap.subscribe((params: any) => {
       const courseId = Number(params.get('id'));
       if (courseId) {
@@ -80,7 +77,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     this.courseService.getCourseById(courseId).subscribe({
       next: (data: Course) => {
         this.course.set(data);
-        this.checkEnrollmentStatus(); // נתיב ההרשמה ייבדק לאחר טעינת הקורס
+        this.checkEnrollmentStatus();
         this.loadLessons(courseId);
         this.isLoading.set(false);
       },
@@ -106,25 +103,17 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // שינוי עיקרי כאן: בדיקת סטטוס הרשמה מתוך אובייקט הקורס
   checkEnrollmentStatus(): void {
     const currentCourse = this.course();
     const currentUserId = this.authService.currentUserId();
-  
-    // ודא ש-currentCourse קיים, ש-currentUserId אינו null,
-    // וש-currentCourse.enrolledStudents קיים ושהוא מערך.
+
     if (currentCourse && currentUserId !== null && currentCourse.enrolledStudents && Array.isArray(currentCourse.enrolledStudents)) {
-      // בדוק אם ה-ID של המשתמש הנוכחי כלול במערך enrolledStudents של הקורס
       this.isEnrolled.set(currentCourse.enrolledStudents.includes(currentUserId));
     } else {
-      // אם אחד מהתנאים לא מתקיים, המשתמש לא רשום (או שאי אפשר לבדוק).
-      // במקרה ש-enrolledStudents הוא undefined/null, זה יגיע לכאן.
       this.isEnrolled.set(false);
-      // אופציונלי: הוסף לוג כדי לדעת מתי זה קורה
-      // console.warn('Cannot check enrollment status: Missing course, userId, or enrolledStudents array is invalid.', { currentCourse, currentUserId });
     }
-    
   }
+
   toggleEnrollment(): void {
     const currentUserId = this.authService.currentUserId();
     const currentCourse = this.course();
@@ -147,16 +136,13 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('ההרשמה בוטלה בהצלחה!');
           this.errorMessage.set(null);
-          // עדכן את ה-signal של הקורס בממשק המשתמש
           this.course.update(course => {
             if (course) {
-              // הסר את ה-userId מרשימת enrolledStudents
               const updatedEnrolledStudents = course.enrolledStudents.filter((id: number) => id !== currentUserId);
               return { ...course, enrolledStudents: updatedEnrolledStudents };
             }
             return null;
           });
-          // סטטוס ההרשמה יתעדכן אוטומטית דרך ה-effect
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בביטול הרשמה:', error);
@@ -170,7 +156,6 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('נרשמת לקורס בהצלחה!');
           this.errorMessage.set(null);
-          // עדכן את ה-signal של הקורס בממשק המשתמש
           this.course.update(course => {
             if (course) {
               const currentEnrolledStudents = [...course.enrolledStudents];
@@ -181,7 +166,6 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
             }
             return null;
           });
-          // סטטוס ההרשמה יתעדכן אוטומטית דרך ה-effect
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בהרשמה:', error);
@@ -192,34 +176,32 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // שאר המתודות (openLessonForm, closeLessonForm, onLessonSaved, deleteLesson, editCourse, deleteCourse)
-  // נשארות כפי שהן, שכן הן לא היו תלויות ב-getEnrolledCoursesForUser.
-  // וודא שהפניות ל-authService.currentUserRole() ו-authService.currentUserId() תקינות כפי שתוקן קודם.
+  // **המתודות האלה (openLessonForm, closeLessonForm, onLessonSaved) אינן נחוצות יותר**
+  // **אם הטופס נפתח בעמוד נפרד באמצעות הראוטר. ניתן להסיר אותן.**
+  // openLessonForm(lesson?: Lesson): void {
+  //   const currentCourse = this.course();
+  //   if (!currentCourse || this.authService.currentUserRole() !== 'teacher' || currentCourse.teacherId !== this.authService.currentUserId()) {
+  //     this.errorMessage.set('אין לך הרשאה לבצע פעולה זו.');
+  //     return;
+  //   }
+  //   this.selectedLesson.set(lesson);
+  //   this.showLessonForm.set(true);
+  // }
 
-  openLessonForm(lesson?: Lesson): void {
-    const currentCourse = this.course();
-    if (!currentCourse || this.authService.currentUserRole() !== 'teacher' || currentCourse.teacherId !== this.authService.currentUserId()) {
-      this.errorMessage.set('אין לך הרשאה לבצע פעולה זו.');
-      return;
-    }
-    this.selectedLesson.set(lesson);
-    this.showLessonForm.set(true);
-  }
+  // closeLessonForm(): void {
+  //   this.showLessonForm.set(false);
+  //   this.selectedLesson.set(undefined);
+  // }
 
-  closeLessonForm(): void {
-    this.showLessonForm.set(false);
-    this.selectedLesson.set(undefined);
-  }
-
-  onLessonSaved(): void {
-    this.successMessage.set('השיעור נשמר בהצלחה!');
-    this.errorMessage.set(null);
-    this.closeLessonForm();
-    const currentCourse = this.course();
-    if (currentCourse) {
-      this.loadLessons(currentCourse.id);
-    }
-  }
+  // onLessonSaved(): void {
+  //   this.successMessage.set('השיעור נשמר בהצלחה!');
+  //   this.errorMessage.set(null);
+  //   this.closeLessonForm();
+  //   const currentCourse = this.course();
+  //   if (currentCourse) {
+  //     this.loadLessons(currentCourse.id); // רענן את רשימת השיעורים לאחר שמירה
+  //   }
+  // }
 
   deleteLesson(lessonId: number): void {
     const currentCourse = this.course();
@@ -247,7 +229,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   editCourse(): void {
     const currentCourse = this.course();
     if (currentCourse) {
-      this.router.navigate(['/edit-course', currentCourse.id]);
+      this.router.navigate(['/courses/edit', currentCourse.id]);
     } else {
       this.errorMessage.set('לא ניתן לערוך קורס שאינו נטען.');
     }
