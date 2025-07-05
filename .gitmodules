@@ -1,0 +1,3 @@
+[submodule "CourseOnlineServer"]
+	path = CourseOnlineServer
+	url = https://github.com/ReizRoz/CourseOnlineServer.git
