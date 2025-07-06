@@ -1,5 +1,4 @@
-// src/app/courses/course-details/course-details.component.ts
-import { Component, OnInit, signal, OnDestroy, effect } from '@angular/core';
+import { Component, OnInit, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService } from '../../service/course.service';
@@ -7,8 +6,6 @@ import { Course, Lesson } from '../../models/course.modul';
 import { AuthService } from '../../service/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HeaderComponent } from '../../shared/header/header.component';
-// **הסר את ייבוא LessonFormComponent מכיוון שהוא לא נטען כעת כפופאפ בתוך הקומפוננטה הזו.**
-// import { LessonFormComponent } from '../lesson-form/lesson-form.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../service/user.service';
 import { MaterialModule } from '../../shared/material/material.module';
@@ -20,9 +17,7 @@ import { MaterialModule } from '../../shared/material/material.module';
     CommonModule,
     HeaderComponent,
     MaterialModule,
-    // **הסר את LessonFormComponent מה-imports כאן, הוא נטען דרך ה-router.**
-    // LessonFormComponent,
-    RouterModule // נשאר כי אתה משתמש ב-routerLink ב-HTML
+    RouterModule
   ],
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.scss']
@@ -33,11 +28,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   isEnrolled = signal<boolean>(false);
-  isLoading = signal<boolean>(true);
-
-  // **משתני Signal לשליטה בפופאפ - אין בהם צורך אם עוברים לדף חדש. ניתן להסירם.**
-  // showLessonForm = signal<boolean>(false);
-  // selectedLesson = signal<Lesson | undefined>(undefined);
+  isLoading = signal<boolean>(false);
 
   private routeSubscription: Subscription | undefined;
 
@@ -47,16 +38,13 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public userService: UserService,
     public router: Router
-  ) {
-    effect(() => {
-      this.checkEnrollmentStatus();
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.activatedRoute.paramMap.subscribe((params: any) => {
       const courseId = Number(params.get('id'));
       if (courseId) {
+        this.isLoading.set(true);
         this.loadCourseDetails(courseId);
       } else {
         this.errorMessage.set('מזהה קורס לא חוקי.');
@@ -70,14 +58,14 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCourseDetails(courseId: number): void {
-    this.isLoading.set(true);
     this.errorMessage.set(null);
     this.successMessage.set(null);
+    this.isEnrolled.set(false); // לא סומכים על השרת
 
     this.courseService.getCourseById(courseId).subscribe({
       next: (data: Course) => {
+        console.log('Course data fetched:', data);
         this.course.set(data);
-        this.checkEnrollmentStatus();
         this.loadLessons(courseId);
         this.isLoading.set(false);
       },
@@ -103,17 +91,6 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkEnrollmentStatus(): void {
-    const currentCourse = this.course();
-    const currentUserId = this.authService.currentUserId();
-
-    if (currentCourse && currentUserId !== null && currentCourse.enrolledStudents && Array.isArray(currentCourse.enrolledStudents)) {
-      this.isEnrolled.set(currentCourse.enrolledStudents.includes(currentUserId));
-    } else {
-      this.isEnrolled.set(false);
-    }
-  }
-
   toggleEnrollment(): void {
     const currentUserId = this.authService.currentUserId();
     const currentCourse = this.course();
@@ -130,78 +107,45 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
 
     const courseId = currentCourse.id;
 
+    if (this.isLoading()) {
+      console.log('Prevented double click: Already loading.');
+      return;
+    }
+
+    this.isLoading.set(true);
+
     if (this.isEnrolled()) {
-      // ביטול הרשמה
       this.courseService.unenrollFromCourse(courseId, currentUserId).subscribe({
         next: () => {
           this.successMessage.set('ההרשמה בוטלה בהצלחה!');
           this.errorMessage.set(null);
-          this.course.update(course => {
-            if (course) {
-              const updatedEnrolledStudents = course.enrolledStudents.filter((id: number) => id !== currentUserId);
-              return { ...course, enrolledStudents: updatedEnrolledStudents };
-            }
-            return null;
-          });
+          this.isEnrolled.set(false); // שינוי ידני
+          this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בביטול הרשמה:', error);
           this.errorMessage.set(error.error?.message || 'שגיאה בביטול ההרשמה לקורס.');
           this.successMessage.set(null);
+          this.isLoading.set(false);
         }
       });
     } else {
-      // הרשמה
       this.courseService.enrollInCourse(courseId, currentUserId).subscribe({
         next: () => {
           this.successMessage.set('נרשמת לקורס בהצלחה!');
           this.errorMessage.set(null);
-          this.course.update(course => {
-            if (course) {
-              const currentEnrolledStudents = [...course.enrolledStudents];
-              if (!currentEnrolledStudents.includes(currentUserId)) {
-                currentEnrolledStudents.push(currentUserId);
-              }
-              return { ...course, enrolledStudents: currentEnrolledStudents };
-            }
-            return null;
-          });
+          this.isEnrolled.set(true); // שינוי ידני
+          this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בהרשמה:', error);
           this.errorMessage.set(error.error?.message || 'שגיאה בהרשמה לקורס.');
           this.successMessage.set(null);
+          this.isLoading.set(false);
         }
       });
     }
   }
-
-  // **המתודות האלה (openLessonForm, closeLessonForm, onLessonSaved) אינן נחוצות יותר**
-  // **אם הטופס נפתח בעמוד נפרד באמצעות הראוטר. ניתן להסיר אותן.**
-  // openLessonForm(lesson?: Lesson): void {
-  //   const currentCourse = this.course();
-  //   if (!currentCourse || this.authService.currentUserRole() !== 'teacher' || currentCourse.teacherId !== this.authService.currentUserId()) {
-  //     this.errorMessage.set('אין לך הרשאה לבצע פעולה זו.');
-  //     return;
-  //   }
-  //   this.selectedLesson.set(lesson);
-  //   this.showLessonForm.set(true);
-  // }
-
-  // closeLessonForm(): void {
-  //   this.showLessonForm.set(false);
-  //   this.selectedLesson.set(undefined);
-  // }
-
-  // onLessonSaved(): void {
-  //   this.successMessage.set('השיעור נשמר בהצלחה!');
-  //   this.errorMessage.set(null);
-  //   this.closeLessonForm();
-  //   const currentCourse = this.course();
-  //   if (currentCourse) {
-  //     this.loadLessons(currentCourse.id); // רענן את רשימת השיעורים לאחר שמירה
-  //   }
-  // }
 
   deleteLesson(lessonId: number): void {
     const currentCourse = this.course();

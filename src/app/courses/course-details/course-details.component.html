@@ -10,8 +10,8 @@
     <mat-icon>check_circle_outline</mat-icon>
     <span>{{ successMessage() }}</span>
   </div>
-  } @if (isLoading()) {
-  <div class="loading-state">
+  } @if (isLoading() && !course()) {
+    <div class="loading-state">
     <mat-spinner diameter="50"></mat-spinner>
     <p>טוען פרטי קורס...</p>
   </div>
@@ -72,8 +72,11 @@
 
     <mat-card-actions class="course-actions">
       @if (authService.currentUserRole() === 'student' && authService.currentUserId() !== null) {
-      <button mat-raised-button [color]="isEnrolled() ? 'warn' : 'accent'" (click)="toggleEnrollment()">
+      <button mat-raised-button [color]="isEnrolled() ? 'warn' : 'accent'" (click)="toggleEnrollment()" [disabled]="isLoading()">
         {{ isEnrolled() ? 'יציאה מהקורס' : 'הרשמה לקורס' }}
+        @if (isLoading()) {
+          <mat-spinner [diameter]="20" style="margin-left: 8px;"></mat-spinner>
+        }
       </button>
       }
       <button mat-button (click)="router.navigate(['/courses'])">חזור לרשימת הקורסים</button>
