@@ -1,17 +1,9 @@
-/* login.component.scss */
-
-// וודא שמשתני ה-CSS שלך (כמו --background-dark, --background-light, --error-color,
-// --secondary-color, --secondary-color-dark) מוגדרים בקובץ styles.scss הגלובלי שלך
-// וש-styles.scss מיובא כראוי ב-angular.json.
-
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: var(--background-dark); // רקע כהה (שחור/אפור כהה)
-  direction: rtl; // כיווניות ימין לשמאל
-  padding: 20px;
+  background-color: var(--background-dark);   direction: rtl;   padding: 20px;
 }
 
 .login-card {
@@ -21,45 +13,27 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--background-light);
-  border: 2px solid var(--color-white) !important; // מסגרת לבנה
-  box-shadow: 0 0 25px rgba(255, 255, 255, 1) // רקע בהיר (לבן)
-  
-  // ה-mat-card מקבל כבר מסגרת כחולה והילה מהסגנונות הגלובליים (styles.scss)
-  // ולכן אין צורך להוסיף כאן סגנונות כפולים למסגרת/הילה.
-}
+  border: 2px solid var(--color-white) !important;   box-shadow: 0 0 25px rgba(255, 255, 255, 1)   
+    }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 15px; // רווח בין האלמנטים בטופס
-}
+  gap: 15px; }
 
 mat-form-field {
   width: 100%;
-  direction: rtl; // לוודא כיווניות ימין לשמאל בתוך השדה
-  text-align: right; // לוודא יישור טקסט לימין
-}
+  direction: rtl;   text-align: right; }
 
 .overall-error {
-  color: var(--error-color); // צבע שגיאה מהמשתנים הגלובליים
-  margin-top: 10px;
+  color: var(--error-color);   margin-top: 10px;
   text-align: center;
   font-weight: bold;
   font-size: 0.9rem;
 }
 
-/* **סגנונות הקישור "למשתמש חדש"** */
 .switch-form-link {
-  color: var((--color-blue)); // צבע כחול מהמשתנים הגלובליים
-  text-decoration: none; // הסרת קו תחתון
-  font-weight: 500; // עובי גופן בינוני
-  text-align: center; // יישור טקסט הקישור למרכז (בתוך הקישור עצמו)
-  display: block; // הופך את הקישור לאלמנט בלוק כדי שנוכל למרכז אותו עם margin: auto
-  margin: 10px auto 0 auto; // ממורכז אופקית + רווח עליון
-  transition: color 0.3s ease-in-out; // מעבר חלק לצבע
-
+  color: var((--color-blue));   text-decoration: none;   font-weight: 500;   text-align: center;   display: block;   margin: 10px auto 0 auto;   transition: color 0.3s ease-in-out; 
   &:hover {
-    color: var(--secondary-color); // גוון כהה יותר של כחול במעבר עכבר
-    text-decoration: underline; // הוספת קו תחתון במעבר עכבר (אופציונלי)
-  }
+    color: var(--secondary-color);     text-decoration: underline;   }
 }

@@ -42,14 +42,12 @@ export class RegisterComponent implements OnInit {
       const roleControl = this.registerForm.get('role');
       if (this.isEditMode()) {
         passwordControl?.clearValidators();
-        passwordControl?.updateValueAndValidity(); // עדכון לאחר הסרת ולידטורים
-        roleControl?.disable();
+        passwordControl?.updateValueAndValidity();         roleControl?.disable();
       } else {
         passwordControl?.setValidators(Validators.required);
-        passwordControl?.updateValueAndValidity(); // עדכון לאחר הוספת ולידטורים
-        roleControl?.enable();
+        passwordControl?.updateValueAndValidity();         roleControl?.enable();
       }
-      // אין צורך לקרוא ל-updateValueAndValidity על roleControl כאן כי enable/disable עושים זאת.
+
     });
   }
 
@@ -60,28 +58,21 @@ export class RegisterComponent implements OnInit {
         this.loadUserDetailsForEdit();
       } else {
         this.isEditMode.set(false);
-        this.registerForm.reset({ role: '' }); // מאפס את הטופס כולל תפקיד
-        // ולידטורים יוחזרו על ידי ה-effect
+        this.registerForm.reset({ role: '' }); 
       }
     });
   }
 
   loadUserDetailsForEdit(): void {
-    console.log('RegisterComponent: Attempting to load user details for edit.');
     const currentUser = this.authService.currentUserDetails();
-    console.log('RegisterComponent: currentUserDetails signal value:', currentUser);
   
-    // שנה את הלוג כדי שיציג את currentUser.id
+
     if (currentUser) {
-      console.log('RegisterComponent: currentUser.id value:', currentUser.id, 'Type:', typeof currentUser.id); // <--- שינוי כאן
     } else {
       console.warn('RegisterComponent: currentUserDetails is null or undefined.');
     }
   
-    if (currentUser && currentUser.id) { // <--- שינוי כאן: מ-_id ל-id
-      console.log('RegisterComponent: User details found. Populating form.');
-      this.currentUserIdForEdit = currentUser.id; // <--- שינוי כאן: מ-_id ל-id
-      this.registerForm.patchValue({
+    if (currentUser && currentUser.id) {       this.currentUserIdForEdit = currentUser.id;       this.registerForm.patchValue({
         name: currentUser.name,
         email: currentUser.email,
         role: currentUser.role
@@ -98,8 +89,7 @@ export class RegisterComponent implements OnInit {
   onSubmitForm() {
     if (this.registerForm.invalid) {
       this.errorMessage.set('אנא מלא את כל השדות הנדרשים כראוי.');
-      this.registerForm.markAllAsTouched(); // סמן את כל השדות כדי להציג שגיאות ולידציה
-      return;
+      this.registerForm.markAllAsTouched();       return;
     }
 
     this.isSubmitting.set(true);
@@ -107,7 +97,7 @@ export class RegisterComponent implements OnInit {
 
     const formData = this.registerForm.getRawValue();
     
-    // במצב עריכה, אם הסיסמה ריקה, אל תשלח אותה לשרת
+
     if (this.isEditMode() && (!formData.password || formData.password.trim() === '')) {
       delete formData.password;
     }
@@ -120,14 +110,14 @@ export class RegisterComponent implements OnInit {
         return;
       }
       const updateData = { ...formData };
-      // אין צורך לשלוח את התפקיד בעריכה אם הוא מושבת
+
       delete updateData.role; 
 
-      // נמיר את ה-ID למחרוזת לפני השליחה למתודת updateUser
+
 this.authService.updateUser(String(this.currentUserIdForEdit), updateData).subscribe({
               next: () => {
           this.isSubmitting.set(false);
-          // השאר את ה-SnackBar להודעת הצלחה, זה הגיוני
+
           this.snackBar.open('הפרופיל עודכן בהצלחה!', 'סגור', { duration: 3000 });
           this.router.navigate(['/courses']);
         },
@@ -139,18 +129,15 @@ this.authService.updateUser(String(this.currentUserIdForEdit), updateData).subsc
           } else if (typeof err.message === 'string') {
             specificMessage = err.message;
           }
-          this.errorMessage.set(specificMessage); // הצג את השגיאה בתוך הקומפוננטה
-          // הסר את שורת ה-SnackBar כאן, כדי למנוע כפילות.
-          // this.snackBar.open(specificMessage, 'סגור', { duration: 5000 }); // שורה זו תוסר
+          this.errorMessage.set(specificMessage); 
+
           console.error('RegisterComponent: Error updating profile:', err);
         }
       });
-    } else { // מצב הרשמה
-      this.authService.register(formData).subscribe({
+    } else {       this.authService.register(formData).subscribe({
         next: (response) => {
-          console.log('RegisterComponent: Registration successful response:', response);
           this.isSubmitting.set(false);
-          // השאר את ה-SnackBar להודעת הצלחה, זה הגיוני
+
           this.snackBar.open('ההרשמה הצליחה! ברוך הבא.', 'סגור', { duration: 3000 });
           this.router.navigate(['/courses']);
         },
@@ -174,12 +161,7 @@ this.authService.updateUser(String(this.currentUserIdForEdit), updateData).subsc
             }
           }
   
-          this.errorMessage.set(specificMessage); // הצג את השגיאה בתוך הקומפוננטה
-          // הסר את שורת ה-SnackBar כאן, כדי למנוע כפילות.
-          // this.snackBar.open(specificMessage, 'סגור', { duration: 7000, panelClass: ['error-snackbar'] }); // שורה זו תוסר
-          console.log('RegisterComponent: Error message signal set to:', this.errorMessage());
-          console.log('RegisterComponent: Staying on registration page due to error.');
-        }
+          this.errorMessage.set(specificMessage);         }
       });
     }
   }

@@ -1,4 +1,4 @@
-// src/app/courses/course-form/course-form.component.ts
+
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -9,8 +9,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { MaterialModule } from '../../shared/material/material.module';
 import { Course } from '../../models/course.modul';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs'; // לייבא Subscription
-
+import { Subscription } from 'rxjs'; 
 @Component({
   selector: 'app-course-form',
   standalone: true,
@@ -29,9 +28,7 @@ export class CourseFormComponent implements OnInit {
   courseId = signal<number | null>(null);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
-  isLoading = signal<boolean>(false); // לטעינת נתונים (במצב עריכה)
-  isSubmitting = signal<boolean>(false); // לשליחת הטופס
-
+  isLoading = signal<boolean>(false);   isSubmitting = signal<boolean>(false); 
   private routeSubscription: Subscription | undefined;
 
   constructor(
@@ -59,14 +56,12 @@ export class CourseFormComponent implements OnInit {
         this.loadCourseDetails(id);
       } else {
         this.isEditMode.set(false);
-        this.isLoading.set(false); // במצב יצירה אין טעינת נתונים
-      }
+        this.isLoading.set(false);       }
     });
   }
 
   ngOnDestroy(): void {
-    this.routeSubscription?.unsubscribe(); // חובה לנקות מינויים ב-onDestroy
-  }
+    this.routeSubscription?.unsubscribe();   }
 
   initForm(): void {
     this.courseForm = this.fb.group({
@@ -84,8 +79,7 @@ export class CourseFormComponent implements OnInit {
           description: course.description
         });
         this.isLoading.set(false);
-        this.errorMessage.set(null); // נקה שגיאות קודמות
-      },
+        this.errorMessage.set(null);       },
       error: (error: HttpErrorResponse) => {
         console.error('Error loading course details:', error);
         this.errorMessage.set(error.error?.message || 'שגיאה בטעינת פרטי הקורס.');
@@ -97,8 +91,7 @@ export class CourseFormComponent implements OnInit {
   onSubmit(): void {
     this.errorMessage.set(null);
     this.successMessage.set(null);
-    this.isSubmitting.set(true); // מראה ספינר בזמן שליחת הטופס
-
+    this.isSubmitting.set(true); 
     if (this.courseForm.invalid) {
       this.errorMessage.set('נא למלא את כל שדות החובה.');
       this.courseForm.markAllAsTouched();
@@ -120,14 +113,12 @@ export class CourseFormComponent implements OnInit {
     };
 
     if (this.isEditMode() && this.courseId()) {
-      // מצב עריכה
+
       this.courseService.updateCourse(this.courseId()!, courseData).subscribe({
         next: (response) => {
           this.successMessage.set('הקורס עודכן בהצלחה!');
-          console.log('Course updated successfully:', response);
           this.isSubmitting.set(false);
-          this.router.navigate(['/courses']); // או נווט לדף הקורס הספציפי
-        },
+          this.router.navigate(['/courses']);         },
         error: (error: HttpErrorResponse) => {
           console.error('Error updating course:', error);
           this.errorMessage.set(error.error?.message || 'שגיאה בעדכון הקורס. אנא נסה שוב.');
@@ -135,15 +126,12 @@ export class CourseFormComponent implements OnInit {
         }
       });
     } else {
-      // מצב יצירה
+
       this.courseService.createCourse(courseData).subscribe({
         next: (response) => {
           this.successMessage.set('הקורס נוצר בהצלחה!');
-          console.log('Course created successfully:', response);
           this.isSubmitting.set(false);
-          this.courseForm.reset(); // איפוס הטופס לאחר יצירה
-          this.router.navigate(['/courses']); // או נווט לדף הקורסים
-        },
+          this.courseForm.reset();           this.router.navigate(['/courses']);         },
         error: (error: HttpErrorResponse) => {
           console.error('Error creating course:', error);
           this.errorMessage.set(error.error?.message || 'אירעה שגיאה ביצירת הקורס.');
@@ -154,6 +142,5 @@ export class CourseFormComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['/courses']); // נווט חזרה לדף הקורסים
-  }
+    this.router.navigate(['/courses']);   }
 }

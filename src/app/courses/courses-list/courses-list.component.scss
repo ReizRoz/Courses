@@ -13,14 +13,8 @@
     align-items: center;
 }
 
-.loading-spinner-container {
-    // יורש מהגלובלי
-}
-
 .error-message {
-    // יורש מהגלובלי
-    margin: 30px auto; // ספציפי למיקום המארג'ינים
-}
+        margin: 30px auto; }
 
 .courses-content {
     width: 100%;
@@ -55,8 +49,7 @@
 
     mat-card-content {
         padding-top: 10px;
-        color: var(--text-on-light); // טקסט שחור על רקע לבן
-        flex-grow: 1;
+        color: var(--text-on-light);         flex-grow: 1;
         p {
             margin-bottom: 12px;
 
@@ -77,9 +70,7 @@
     text-align: center;
     padding: 80px 20px;
     font-size: 1.4em;
-    color: var(--text-secondary); // לבן
-    background-color: var(--background-light); // לבן
-    border-radius: 12px;
+    color: var(--text-secondary);     background-color: var(--background-light);     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -97,29 +88,20 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     white-space: nowrap;
     
-    // *** סגנונות ספציפיים לכפתור "צור קורס חדש" ***
-    background-color: var(--color-white) ; // רקע לבן
-    border: 2px solid var(--color-blue); // מסגרת כחולה
-    color: var(--color-blue) ; // טקסט כחול
-    
+        background-color: var(--color-white) ;     border: 2px solid var(--color-blue);     color: var(--color-blue) ;     
     .mdc-button__label {
         color: var(--color-blue);
     }
     --mat-mdc-button-label-text-color: var(--color-blue) ;
-    --mat-mdc-button-icon-color: var(--color-blue)  // אייקון כחול
-
+    --mat-mdc-button-icon-color: var(--color-blue)  
     &:hover {
-        background-color: rgba(0, 69, 184, 0.05) ; // רקע כחול שקוף עדין מאוד בהובר
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); // צל חזק יותר
-    }
+        background-color: rgba(0, 69, 184, 0.05) ;         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);     }
 
     mat-icon {
         margin-left: 20px;
-        color: var(--color-blue); // וודא שהאייקון בתוך הכפתור כחול
-    }
+        color: var(--color-blue);     }
 }
 
-// Media Queries for Responsiveness
 @media (max-width: 900px) {
     .courses-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

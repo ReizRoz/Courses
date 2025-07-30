@@ -1,4 +1,3 @@
-/* src/app/courses/course-form/course-form.component.scss */
 @use "sass:color";
 
 .course-form-wrapper {
@@ -19,9 +18,7 @@
     width: 100%;
     max-width: 650px;
     margin: 20px 0;
-    /* הערה: סגנונות ה-border וה-box-shadow החזקים יותר
-       עדיף שיועברו ל-src/styles.scss לקבלת ספציפיות טובה יותר על mat-card. */
-}
+    }
 
 .course-form {
     display: flex;
@@ -30,8 +27,7 @@
 }
 
 .form-field-full-width {
-    // השתמש בסגנונות הגלובליים, אין צורך ספציפי כאן.
-}
+    }
 
 .form-actions {
     display: flex;
@@ -41,12 +37,10 @@
     flex-wrap: wrap;
 
     .submit-btn {
-        // השתמש בסגנונות הגלובליים
-    }
+            }
 
     .cancel-btn {
-        // השתמש בסגנונות הגלובליים
-    }
+            }
 }
 
 .message-box {

@@ -1,11 +1,10 @@
-// src/app/models/course.modul.ts
+
 export interface Course {
   id: number;
   title: string;
   description: string;
   teacherId: number;
-  enrolledStudents: number[]; // וודא ששדה זה קיים ומסוג Array of numbers (IDs)
-  // הוסף כאן שדות נוספים אם קיימים ב-Backend, כמו lessons, אם הם חלק מאובייקט הקורס המלא
+  enrolledStudents: number[]; 
 }
 
 export interface Lesson {

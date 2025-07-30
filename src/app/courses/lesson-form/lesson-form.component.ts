@@ -1,4 +1,4 @@
-// src/app/courses/lesson-form/lesson-form.component.ts
+
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -17,8 +17,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    HeaderComponent // **חשוב מאוד: וודאי שזה קיים כאן**
-  ],
+    HeaderComponent   ],
   templateUrl: './lesson-form.component.html',
   styleUrls: ['./lesson-form.component.scss']
 })
@@ -86,20 +85,18 @@ export class LessonFormComponent implements OnInit {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    // קבלי את הערכים מהטופס
+
     const lessonData = this.lessonForm.value;
 
-    // **הוספת courseId לאובייקט lessonData לפני השליחה**
-    // השרת שלך מצפה ל-courseId בתוך ה-body של ה-PUT
-    // וודאי ש-this.courseId קיים ומכיל את ה-ID הנכון
+
+
+
     const dataToSend = {
-      ...lessonData, // כל מה שיש ב-title ו-content
-      courseId: this.courseId // הוספת courseId
-    };
+      ...lessonData,       courseId: this.courseId     };
 
 
     if (this.isEditMode() && this.lessonId) {
-      // שלחי את dataToSend המעודכן לשרת
+
       this.courseService.updateLesson(this.courseId, this.lessonId, dataToSend).subscribe({
         next: () => {
           this.successMessage.set('השיעור עודכן בהצלחה!');
@@ -114,7 +111,7 @@ export class LessonFormComponent implements OnInit {
         }
       });
     } else {
-      // עבור יצירה, זה כבר היה נכון כי השרת מצפה ל-title, content, courseId בנפרד בפונקציית create
+
       this.courseService.createLesson(this.courseId, lessonData).subscribe({
         next: () => {
           this.successMessage.set('השיעור נוצר בהצלחה!');

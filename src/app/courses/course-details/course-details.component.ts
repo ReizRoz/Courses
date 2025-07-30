@@ -60,11 +60,9 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   loadCourseDetails(courseId: number): void {
     this.errorMessage.set(null);
     this.successMessage.set(null);
-    this.isEnrolled.set(false); // לא סומכים על השרת
-
+    this.isEnrolled.set(false); 
     this.courseService.getCourseById(courseId).subscribe({
       next: (data: Course) => {
-        console.log('Course data fetched:', data);
         this.course.set(data);
         this.loadLessons(courseId);
         this.isLoading.set(false);
@@ -108,7 +106,6 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     const courseId = currentCourse.id;
 
     if (this.isLoading()) {
-      console.log('Prevented double click: Already loading.');
       return;
     }
 
@@ -119,8 +116,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('ההרשמה בוטלה בהצלחה!');
           this.errorMessage.set(null);
-          this.isEnrolled.set(false); // שינוי ידני
-          this.isLoading.set(false);
+          this.isEnrolled.set(false);           this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בביטול הרשמה:', error);
@@ -134,8 +130,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('נרשמת לקורס בהצלחה!');
           this.errorMessage.set(null);
-          this.isEnrolled.set(true); // שינוי ידני
-          this.isLoading.set(false);
+          this.isEnrolled.set(true);           this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בהרשמה:', error);
