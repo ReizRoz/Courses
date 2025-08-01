@@ -1,30 +1,30 @@
 <app-header [title]="'פרטי קורס'"></app-header>
 <div class="course-details-wrapper">
-  @if (errorMessage()) {
-  <div class="message-box error-message">
-    <mat-icon>error_outline</mat-icon>
-    <span>{{ errorMessage() }}</span>
-  </div>
-  } @if (successMessage()) {
-  <div class="message-box success-message">
-    <mat-icon>check_circle_outline</mat-icon>
-    <span>{{ successMessage() }}</span>
-  </div>
-  } @if (isLoading() && !course()) {
+  <div class="message-container">
+    @if (errorMessage()) {
+    <div class="message-box error-message">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage() }}</span>
+    </div>
+    } @if (successMessage()) {
+    <div class="message-box success-message">
+      <mat-icon>check_circle_outline</mat-icon>
+      <span>{{ successMessage() }}</span>
+    </div>
+    } @if (isLoading() && !course()) {
     <div class="loading-state">
-    <mat-spinner diameter="50"></mat-spinner>
-    <p>טוען פרטי קורס...</p>
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>טוען פרטי קורס...</p>
+    </div>
+    } @else if (!course() && !errorMessage() && !successMessage()) { <div class="info-message">
+      <mat-icon>info_outline</mat-icon>
+      <p>הקורס לא נמצא או שגיאה בטעינה.</p>
+    </div>
+    }
   </div>
-  } @else if (!course()) {
-  <div class="info-message">
-    <mat-icon>info_outline</mat-icon>
-    <p>הקורס לא נמצא או שגיאה בטעינה.</p>
-  </div>
-  } @else {
-  <mat-card class="course-main-card">
 
+  @if (course()) { <mat-card class="course-main-card">
     <mat-card-title>{{ course()!.title }}</mat-card-title>
-
 
     <mat-card-content>
       <h3>תיאור הקורס:</h3>
@@ -54,8 +54,7 @@
         }
       </mat-list>
       } @else {
-      <div class="info-message">
-        <p>אין שיעורים זמינים בקורס זה כרגע.</p>
+      <div class="info-message no-lessons-message"> <p>אין שיעורים זמינים בקורס זה כרגע.</p>
         @if (authService.currentUserRole() === 'teacher' && course()!.teacherId === authService.currentUserId()) {
         <button mat-raised-button color="primary" class="add-lesson-button" [routerLink]="['/courses', course()!.id, 'add-lesson']">
           <mat-icon>add</mat-icon> הוסף שיעור ראשון

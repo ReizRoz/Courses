@@ -1,0 +1,130 @@
+/* src/app/auth/edit-profile/edit-profile.component.scss */
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 64px);
+    background-color: var(--background-dark);
+    direction: rtl;
+    padding: 20px;
+    position: relative; /* הוסף: כדי שניתן יהיה למקם ילדים במיקום מוחלט */
+  }
+  
+  /* מיכל חדש להודעות */
+  .message-container {
+    position: absolute; /* הוסף: מיקום מוחלט */
+    top: 20px; /* מרחק מהחלק העליון של ה-center-container */
+    left: 50%;
+    transform: translateX(-50%); /* ממקם את האלמנט במרכז אופקית */
+    width: 100%; /* תופס את כל הרוחב הזמין */
+    max-width: 600px; /* מגביל רוחב מקסימלי כמו שהיה ב-message-box */
+    z-index: 10; /* ודא שההודעה תופיע מעל הכרטיס */
+    box-sizing: border-box;
+    padding: 0 20px; /* ריפוד מהצדדים כדי לא לגעת בקצוות המסך */
+  }
+  
+  /* סגנונות של הכרטיס (mat-card) */
+  .auth-card {
+    max-width: 500px; /* שנה את זה ל-250px אם אתה רוצה צר יותר */
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-light);
+    border: 2px solid var(--color-blue) !important;
+    box-shadow: 0 0 20px var(--color-blue);
+    box-sizing: border-box;
+  
+    transition: box-shadow 0.3s ease-in-out;
+    &:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+  }
+  
+  .profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* סגנונות של mat-form-field */
+  mat-form-field {
+    width: 100%;
+    direction: rtl;
+    text-align: right;
+  
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--field-background-light-grey);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      padding: 0 10px;
+    }
+  
+    .mat-mdc-form-field-subscript-wrapper {
+      min-height: 22px;
+    }
+  
+    mat-error {
+      color: var(--error-color);
+      font-size: 0.85em;
+      padding-top: 2px;
+      text-align: right;
+    }
+  }
+  
+  /* סגנונות הודעות שגיאה/הצלחה - נאפס את ה-margin כדי לא לדחוף תוכן */
+  .message-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border-radius: 8px;
+    /* margin: 15px auto; <- הסרנו את זה כי עכשיו המיקום מוחלט */
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(13, 166, 44, 0.1);
+    gap: 8px;
+    text-align: center;
+    width: fit-content; /* ההודעה תהיה ברוחב התוכן שלה */
+    margin: 0 auto; /* מרכז את תיבת ההודעה בתוך ה-message-container */
+  
+    mat-icon {
+      font-size: 24px;
+      height: 24px;
+      width: 24px;
+      color: inherit;
+    }
+    span {
+      line-height: 1.4;
+    }
+  }
+  
+  .error-message {
+    background-color: var(--error-background);
+    color: var(--error-color);
+    mat-icon { color: var(--error-color); }
+  }
+  
+  .success-message {
+    background-color: var(--success-background);
+    color: var(--success-color);
+    mat-icon { color: var(--success-color); }
+  }
+  
+  /* סגנונות לכפתורים */
+  mat-card button {
+    width: 100%;
+    margin-top: 8px;
+    font-size: 0.95em;
+    padding: 10px 0;
+  }
+  
+  button[type="submit"] {
+    margin-bottom: 8px;
+  }
+  
+  button[type="button"] {
+    background-color: transparent;
+    color: var(--color-blue);
+    box-shadow: none;
+  }

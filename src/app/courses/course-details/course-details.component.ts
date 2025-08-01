@@ -1,12 +1,13 @@
+// src/app/pages/course-details/course-details.component.ts
 import { Component, OnInit, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService } from '../../service/course.service';
-import { Course, Lesson } from '../../models/course.modul';
+import { Course, Lesson } from '../../models/course.modul'; // וודאי שהנתיב למודלים נכון
 import { AuthService } from '../../service/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, of } from 'rxjs'; // הוספת `of` מ-RxJS
 import { UserService } from '../../service/user.service';
 import { MaterialModule } from '../../shared/material/material.module';
 
@@ -36,7 +37,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private courseService: CourseService,
     public authService: AuthService,
-    public userService: UserService,
+    public userService: UserService, // ודא שאתה צריך את ה-UserService, אם לא, הסר אותו
     public router: Router
   ) {}
 
@@ -60,31 +61,43 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   loadCourseDetails(courseId: number): void {
     this.errorMessage.set(null);
     this.successMessage.set(null);
-    this.isEnrolled.set(false); 
-    this.courseService.getCourseById(courseId).subscribe({
-      next: (data: Course) => {
-        this.course.set(data);
-        this.loadLessons(courseId);
+    this.isEnrolled.set(false); // מאפסים את הסטטוס בהתחלה
+
+    const currentUserId = this.authService.currentUserId();
+    const currentUserRole = this.authService.currentUserRole();
+
+    // קריאה לפרטי הקורס והשיעורים תמיד תתבצע
+    const courseDetails$ = this.courseService.getCourseById(courseId);
+    const lessons$ = this.courseService.getLessonsByCourseId(courseId);
+
+    // קריאה לקורסי התלמיד תתבצע רק אם המשתמש הוא סטודנט ומחובר
+    const studentCourses$ = (currentUserRole === 'student' && currentUserId !== null)
+      ? this.courseService.getStudentCourses(currentUserId)
+      : of([]); // אם לא סטודנט או אין משתמש, נחזיר Observable ריק
+
+    forkJoin({
+      course: courseDetails$,
+      lessons: lessons$,
+      studentCourses: studentCourses$
+    }).subscribe({
+      next: ({ course, lessons, studentCourses }) => {
+        this.course.set(course);
+        this.lessons.set(lessons);
+
+        // אם המשתמש הוא סטודנט ומחובר, נבדוק אם הוא רשום לקורס הזה
+        if (currentUserRole === 'student' && currentUserId !== null && course) {
+          // בודקים אם ה-ID של הקורס הנוכחי קיים ברשימת הקורסים של התלמיד
+          this.isEnrolled.set(studentCourses.some(c => c.id === course.id));
+        }
+
         this.isLoading.set(false);
       },
       error: (error: HttpErrorResponse) => {
-        console.error('שגיאה בטעינת פרטי הקורס:', error);
+        console.error('שגיאה בטעינת פרטי הקורס או שיעורים:', error);
         this.errorMessage.set(error.error?.message || 'אירעה שגיאה בטעינת פרטי הקורס.');
         this.course.set(null);
+        this.lessons.set(null);
         this.isLoading.set(false);
-      }
-    });
-  }
-
-  loadLessons(courseId: number): void {
-    this.courseService.getLessonsByCourseId(courseId).subscribe({
-      next: (data: Lesson[]) => {
-        this.lessons.set(data);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('שגיאה בטעינת שיעורים:', error);
-        this.errorMessage.set(error.error?.message || 'אירעה שגיאה בטעינת השיעורים.');
-        this.lessons.set([]);
       }
     });
   }
@@ -94,6 +107,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     const currentCourse = this.course();
 
     if (currentUserId === null) {
+      // אם אין משתמש מחובר, נווט לדף ההתחברות
       this.router.navigate(['/login']);
       return;
     }
@@ -106,36 +120,38 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
     const courseId = currentCourse.id;
 
     if (this.isLoading()) {
-      return;
+      return; // מונע קליקים כפולים בזמן טעינה
     }
 
     this.isLoading.set(true);
+    this.errorMessage.set(null); // נקה הודעת שגיאה קודמת
+    this.successMessage.set(null); // נקה הודעת הצלחה קודמת
 
     if (this.isEnrolled()) {
+      // אם רשום, בצע ביטול הרשמה
       this.courseService.unenrollFromCourse(courseId, currentUserId).subscribe({
         next: () => {
           this.successMessage.set('ההרשמה בוטלה בהצלחה!');
-          this.errorMessage.set(null);
-          this.isEnrolled.set(false);           this.isLoading.set(false);
+          this.isEnrolled.set(false); // עדכן סטטוס הרשמה באופן ידני
+          this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בביטול הרשמה:', error);
           this.errorMessage.set(error.error?.message || 'שגיאה בביטול ההרשמה לקורס.');
-          this.successMessage.set(null);
           this.isLoading.set(false);
         }
       });
     } else {
+      // אם לא רשום, בצע הרשמה
       this.courseService.enrollInCourse(courseId, currentUserId).subscribe({
         next: () => {
           this.successMessage.set('נרשמת לקורס בהצלחה!');
-          this.errorMessage.set(null);
-          this.isEnrolled.set(true);           this.isLoading.set(false);
+          this.isEnrolled.set(true); // עדכן סטטוס הרשמה באופן ידני
+          this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה בהרשמה:', error);
           this.errorMessage.set(error.error?.message || 'שגיאה בהרשמה לקורס.');
-          this.successMessage.set(null);
           this.isLoading.set(false);
         }
       });
@@ -144,6 +160,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
 
   deleteLesson(lessonId: number): void {
     const currentCourse = this.course();
+    // ודא שהמשתמש הוא מורה ושהוא המורה של הקורס הזה
     if (!currentCourse || this.authService.currentUserRole() !== 'teacher' || currentCourse.teacherId !== this.authService.currentUserId()) {
       this.errorMessage.set('אין לך הרשאה לבצע פעולה זו.');
       return;
@@ -154,6 +171,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('השיעור נמחק בהצלחה!');
           this.errorMessage.set(null);
+          // הסר את השיעור מהרשימה המקומית
           this.lessons.update(lessons => lessons ? lessons.filter(l => l.id !== lessonId) : null);
         },
         error: (error: HttpErrorResponse) => {
@@ -186,7 +204,7 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
         next: () => {
           this.successMessage.set('הקורס נמחק בהצלחה!');
           this.errorMessage.set(null);
-          this.router.navigate(['/courses']);
+          this.router.navigate(['/courses']); // נווט חזרה לרשימת הקורסים
         },
         error: (error: HttpErrorResponse) => {
           console.error('שגיאה במחיקת קורס:', error);

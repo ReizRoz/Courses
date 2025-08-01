@@ -13,7 +13,8 @@ import { MaterialModule } from '../../shared/material/material.module';
   templateUrl: './login.component.html',   styleUrl: './login.component.scss'    })
 export class LoginComponent {
   loginForm: FormGroup;
-  errorMessage = signal<string>('');   isSubmitting = signal<boolean>(false);
+  errorMessage = signal<string>('');  
+   isSubmitting = signal<boolean>(false);
 
   constructor(
     private router: Router,
@@ -37,12 +38,13 @@ export class LoginComponent {
         },
         error: (err: Error) => {        
              this.isSubmitting.set(false);  
-                   console.error('שגיאה בהתחברות בקומפוננטה:', err.message); 
+             console.error('שגיאה בהתחברות בקומפוננטה:', err.message); 
           this.errorMessage.set(err.message); 
         }
       });
     } else {
-      this.isSubmitting.set(false);       this.errorMessage.set('אנא מלא את כל השדות כנדרש.');
+      this.isSubmitting.set(false);  
+      this.errorMessage.set('אנא מלא את כל השדות כנדרש.');
       this.loginForm.markAllAsTouched();     }
   }
 }

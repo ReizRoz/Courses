@@ -1,0 +1,66 @@
+<div class="center-container">
+    <div class="message-container">
+      @if (errorMessage()) {
+      <div class="message-box error-message">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+      } @if (successMessage()) {
+      <div class="message-box success-message">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>{{ successMessage() }}</span>
+      </div>
+      }
+    </div>
+  
+    <mat-card class="auth-card">
+      <mat-card-header>
+        <mat-card-title>עריכת פרופיל</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form class="profile-edit-form" [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="fill">
+            <mat-label>שם</mat-label>
+            <input matInput formControlName="name" placeholder="הכנס שם מלא">
+            @if (editProfileForm.get('name')?.invalid && (editProfileForm.get('name')?.dirty || editProfileForm.get('name')?.touched)) {
+              <mat-error>שם הוא שדה חובה.</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>אימייל</mat-label>
+            <input matInput formControlName="email" readonly> </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>סיסמה נוכחית</mat-label>
+            <input matInput [type]="'password'" formControlName="currentPassword" placeholder="הכנס סיסמה נוכחית">
+            @if (editProfileForm.get('currentPassword')?.invalid && (editProfileForm.get('currentPassword')?.dirty || editProfileForm.get('currentPassword')?.touched)) {
+              <mat-error>סיסמה נוכחית היא שדה חובה לאימות.</mat-error>
+            }
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>סיסמה חדשה (אופציונלי)</mat-label>
+            <input matInput [type]="'password'" formControlName="newPassword" placeholder="הכנס סיסמה חדשה">
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>אימות סיסמה חדשה</mat-label>
+            <input matInput [type]="'password'" formControlName="confirmNewPassword" placeholder="אמת סיסמה חדשה">
+            @if (editProfileForm.get('confirmNewPassword')?.hasError('passwordMismatch') && (editProfileForm.get('confirmNewPassword')?.dirty || editProfileForm.get('confirmNewPassword')?.touched)) {
+              <mat-error>הסיסמאות החדשות אינן תואמות.</mat-error>
+            }
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="isLoading() || editProfileForm.invalid">
+            שמור שינויים
+            @if (isLoading()) {
+              <mat-spinner [diameter]="20" style="margin-left: 8px;"></mat-spinner>
+            }
+          </button>
+          <button mat-button type="button" (click)="cancelEdit()">בטל</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

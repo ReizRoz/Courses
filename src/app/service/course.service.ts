@@ -1,22 +1,19 @@
-
+// src/app/service/course.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Course, Lesson } from '../models/course.modul';
+import { Course, Lesson } from '../models/course.modul'; // וודאי שהנתיב למודלים נכון
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-
-
   private apiUrl = 'http://localhost:3000/api/courses';
 
   constructor(private http: HttpClient) {}
 
   getAllCourses(): Observable<Course[]> {
-
     return this.http.get<Course[]>(`${this.apiUrl}`).pipe(
       tap(courses => console.log('Fetched courses', courses)),
       catchError(this.handleError)
@@ -24,7 +21,6 @@ export class CourseService {
   }
 
   getCourseById(id: number): Observable<Course> {
-
     return this.http.get<Course>(`${this.apiUrl}/${id}`).pipe(
       tap(course => console.log('Fetched course by ID:', course)),
       catchError(this.handleError)
@@ -32,7 +28,6 @@ export class CourseService {
   }
 
   createCourse(courseData: { title: string, description: string, teacherId: number }): Observable<any> {
-
     return this.http.post<any>(`${this.apiUrl}`, courseData).pipe(
       tap(response => console.log('Course created:', response)),
       catchError(this.handleError)
@@ -40,7 +35,6 @@ export class CourseService {
   }
 
   updateCourse(id: number, courseData: { title?: string, description?: string, teacherId?: number }): Observable<any> {
-
     return this.http.put<any>(`${this.apiUrl}/${id}`, courseData).pipe(
       tap(response => console.log('Course updated:', response)),
       catchError(this.handleError)
@@ -48,27 +42,30 @@ export class CourseService {
   }
 
   deleteCourse(id: number): Observable<any> {
-
     return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
       tap(response => console.log('Course deleted:', response)),
       catchError(this.handleError)
     );
   }
 
-
   enrollInCourse(courseId: number, userId: number): Observable<any> {
-
     return this.http.post(`${this.apiUrl}/${courseId}/enroll`, { userId });
   }
 
   unenrollFromCourse(courseId: number, userId: number): Observable<any> {
-
+    // עבור DELETE עם body, יש להעביר אובייקט עם המאפיין body
     return this.http.delete(`${this.apiUrl}/${courseId}/unenroll`, { body: { userId: userId } });
   }
 
+  // *** הוספה חדשה: מתודה לקבלת כל הקורסים של תלמיד מסוים ***
+  getStudentCourses(studentId: number): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.apiUrl}/student/${studentId}`).pipe(
+      tap(courses => console.log(`Fetched courses for student ${studentId}:`, courses)),
+      catchError(this.handleError)
+    );
+  }
 
   getLessonsByCourseId(courseId: number): Observable<Lesson[]> {
-
     return this.http.get<Lesson[]>(`${this.apiUrl}/${courseId}/lessons`).pipe(
       tap(lessons => console.log(`Fetched lessons for course ${courseId}:`, lessons)),
       catchError(this.handleError)
@@ -76,7 +73,6 @@ export class CourseService {
   }
 
   getLessonById(courseId: number, lessonId: number): Observable<Lesson> {
-
     return this.http.get<Lesson>(`${this.apiUrl}/${courseId}/lessons/${lessonId}`).pipe(
       tap(lesson => console.log(`Fetched lesson ${lessonId} for course ${courseId}:`, lesson)),
       catchError(this.handleError)
@@ -84,7 +80,6 @@ export class CourseService {
   }
 
   createLesson(courseId: number, lessonData: { title: string, content: string }): Observable<any> {
-
     return this.http.post<any>(`${this.apiUrl}/${courseId}/lessons`, lessonData).pipe(
       tap(response => console.log('Lesson created:', response)),
       catchError(this.handleError)
@@ -92,7 +87,6 @@ export class CourseService {
   }
 
   updateLesson(courseId: number, lessonId: number, lessonData: { title?: string, content?: string }): Observable<any> {
-
     return this.http.put<any>(`${this.apiUrl}/${courseId}/lessons/${lessonId}`, lessonData).pipe(
       tap(response => console.log('Lesson updated:', response)),
       catchError(this.handleError)
@@ -100,7 +94,6 @@ export class CourseService {
   }
 
   deleteLesson(courseId: number, lessonId: number): Observable<any> {
-
     return this.http.delete<any>(`${this.apiUrl}/${courseId}/lessons/${lessonId}`).pipe(
       tap(response => console.log('Lesson deleted:', response)),
       catchError(this.handleError)
