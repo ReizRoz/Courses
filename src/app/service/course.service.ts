@@ -1,9 +1,9 @@
-// src/app/service/course.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Course, Lesson } from '../models/course.modul'; // וודאי שהנתיב למודלים נכון
+import { Course, Lesson } from '../models/course.modul'; 
 
 @Injectable({
   providedIn: 'root'
@@ -53,11 +53,9 @@ export class CourseService {
   }
 
   unenrollFromCourse(courseId: number, userId: number): Observable<any> {
-    // עבור DELETE עם body, יש להעביר אובייקט עם המאפיין body
     return this.http.delete(`${this.apiUrl}/${courseId}/unenroll`, { body: { userId: userId } });
   }
 
-  // *** הוספה חדשה: מתודה לקבלת כל הקורסים של תלמיד מסוים ***
   getStudentCourses(studentId: number): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/student/${studentId}`).pipe(
       tap(courses => console.log(`Fetched courses for student ${studentId}:`, courses)),

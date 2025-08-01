@@ -36,8 +36,7 @@ export class HeaderComponent {
     this.router.navigate(['/']);
   }
 
-  // *** שינוי כאן: ניתוב לנתיב החדש של עריכת פרופיל ***
-  editProfile(): void {
+    editProfile(): void {
     this.router.navigate(['/profile/edit']); 
   }
 }

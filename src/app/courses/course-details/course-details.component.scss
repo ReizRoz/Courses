@@ -1,50 +1,50 @@
-/* src/app/courses/course-details/course-details.component.scss */
+
 
 .course-details-wrapper {
-    min-height: calc(100vh - 9vh); /* או calc(100vh - גובה-ההאדר) */
+    min-height: calc(100vh - 9vh); 
     padding: 30px 20px;
     background-color: var(--background-dark);
     direction: rtl;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    position: relative; /* הוסף: כדי לאפשר מיקום מוחלט לילדים */
+    position: relative; 
   
-    /* הסר את הריפודים הכפולים אם הם כבר מוגדרים במקום אחר */
-    /* padding-left: 50px; */
-    /* padding-right: 50px; */
-    /* padding-top: 30px; */
-    /* padding-bottom: 30px; */
+    
+    
+    
+    
+    
   }
   
-  /* מיכל להודעות סטטוס שיופיע מעל התוכן */
+  
   .message-container {
-    position: absolute; /* מיקום מוחלט */
-    top: 20px; /* מרחק מהחלק העליון של ה-wrapper */
+    position: absolute; 
+    top: 20px; 
     left: 50%;
-    transform: translateX(-50%); /* ממקם במרכז אופקית */
-    width: 100%; /* כדי לתפוס את כל הרוחב הזמין */
-    max-width: 600px; /* מגביל את הרוחב המקסימלי */
-    z-index: 10; /* ודא שההודעות יופיעו מעל הכרטיס */
+    transform: translateX(-50%); 
+    width: 100%; 
+    max-width: 600px; 
+    z-index: 10; 
     box-sizing: border-box;
-    padding: 0 20px; /* ריפוד מהצדדים */
-    display: flex; /* כדי למרכז את הילדים בתוכו */
-    justify-content: center; /* מרכז אופקית את תיבות ההודעה */
+    padding: 0 20px; 
+    display: flex; 
+    justify-content: center; 
     align-items: center;
   }
   
   
   .message-box {
-    /* margin: 20px auto; <- הסרנו את זה כי המיקום מוחלט */
-    /* max-width: 600px; <- מוגדר כבר ב-message-container */
+    
+    
     padding: 10px 15px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(13, 166, 44, 0.1);
     font-weight: bold;
     gap: 8px;
     text-align: center;
-    width: fit-content; /* ההודעה תהיה ברוחב התוכן שלה */
-    margin: 0 auto; /* מרכז את תיבת ההודעה בתוך ה-message-container */
+    width: fit-content; 
+    margin: 0 auto; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,9 +62,9 @@
   }
   
   .info-message {
-    /* text-align: center; */
-    padding: 20px; /* הוקטן מעט את הריפוד */
-    /* margin: 20px auto; <- הסרנו את זה */
+    
+    padding: 20px; 
+    
     font-size: 1.1em;
     color: var(--text-color-secondary);
     background-color: var(--background-light);
@@ -74,13 +74,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px; /* הוקטן מעט */
-    /* max-width: 600px; <- מוגדר כבר ב-message-container */
-    width: fit-content; /* כדי שלא יתפוס את כל הרוחב בתוך ה-message-container */
-    margin: 0 auto; /* מרכז את תיבת ההודעה בתוך ה-message-container */
+    gap: 15px; 
+    
+    width: fit-content; 
+    margin: 0 auto; 
   
     mat-icon {
-      font-size: 32px; /* הוקטן מעט */
+      font-size: 32px; 
       height: 32px;
       width: 32px;
       color: var(--primary-color);
@@ -90,9 +90,9 @@
     }
   }
   
-  /* סגנון ספציפי להודעת "אין שיעורים" כדי שלא תקבל מיקום מוחלט */
+  
   .info-message.no-lessons-message {
-    position: static; /* מבטל מיקום מוחלט */
+    position: static; 
     margin-top: 20px;
     margin-bottom: 20px;
     width: auto;
@@ -100,15 +100,15 @@
   
   
   .loading-state {
-    /* margin-top: 50px; */
-    /* margin-bottom: 20px; */
+    
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px; /* הוסף ריפוד */
-    width: fit-content; /* כדי שלא יתפוס את כל הרוחב בתוך ה-message-container */
-    margin: 0 auto; /* מרכז את תיבת ההודעה בתוך ה-message-container */
+    padding: 20px; 
+    width: fit-content; 
+    margin: 0 auto; 
   }
   
   
@@ -120,7 +120,7 @@
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    margin-top: 80px; /* הוסף מרווח מלמעלה כדי לאפשר מקום להודעות ש"מרחפות" */
+    margin-top: 80px; 
   
     mat-card-content {
       padding-top: 20px;
@@ -257,14 +257,14 @@
   
   @media (max-width: 900px) {
     .course-details-wrapper {
-      /* נסיר ריפודים מכאן אם הם מוגדרים גבוה יותר */
+      
       padding-left: 20px;
       padding-right: 20px;
     }
     .course-main-card {
       padding: 20px;
       max-width: 95%;
-      margin-top: 60px; /* התאמה למסכים קטנים יותר */
+      margin-top: 60px; 
     }
     mat-card-header .mat-mdc-card-title {
       font-size: 2em;
@@ -302,12 +302,12 @@
         width: 100%;
       }
     }
-    /* נאפס את ה-max-width עבור הודעות אלו כדי שיתאימו ל-message-container */
+   
     .message-box, .info-message {
       max-width: 100%;
       padding: 15px 20px;
     }
-    /* וודא ש-no-lessons-message לא מקבל מיקום מוחלט */
+    
     .info-message.no-lessons-message {
       position: static;
       margin-top: 20px;
@@ -323,7 +323,7 @@
     .course-main-card {
       padding: 15px;
       border-radius: 8px;
-      margin-top: 50px; /* התאמה נוספת */
+      margin-top: 50px; 
     }
     mat-card-header .mat-mdc-card-title {
       font-size: 1.8em;
@@ -334,14 +334,14 @@
     .lesson-list-item {
       padding: 10px 15px;
     }
-    /* וודא ש-message-box ו-info-message בתוך message-container יתאימו גם כאן */
+    
     .message-container {
-      padding: 0 10px; /* ריפוד קטן יותר במסכים צרים מאוד */
+      padding: 0 10px; 
     }
     .message-box, .info-message {
       padding: 10px 15px;
     }
-    /* וודא ש-no-lessons-message לא מקבל מיקום מוחלט */
+    
     .info-message.no-lessons-message {
       position: static;
       margin-top: 20px;
